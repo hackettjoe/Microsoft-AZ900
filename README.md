@@ -260,7 +260,7 @@ Hierarchy: Geography -> Region -> Availability Zone -> Availability Set -> Fault
 - 99.99% VM uptime SLA is offered when two or more VMs are deployed across two or more Availability Zones within an Azure region 
 - No cost for deploying resources in AZ's 
 
-![storage](/assets/lrs-grs.png)
+![storage](lrs-grs.png)
 
 
 
