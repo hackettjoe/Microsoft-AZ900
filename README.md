@@ -1,9 +1,10 @@
 # Microsoft-AZ900
-> These are my personal notes from studying for the Microsoft Fundamentals AZ-900 exam>.
+> These are my personal notes from studying for the Microsoft Fundamentals AZ-900 exam.>
 
 ## Table of Contents
 
 - [Cloud-Concepts](#Cloud-Concepts)
+- [Core-Azure-Services](#Core-Azure-Services)
 
 ---
 
@@ -197,6 +198,85 @@ Type | Advantages | Disadvantages
 Public | High Scalability and Agility, PAYG (No CapEx, OpEx model), Not responsible for hardware maintenance, Minimal technical knowledge required | May not be able to meet specific security requirements, May not be able to meet specific compliance requirements, You don't own the hardware and may not be able to manage them as you wish
 Private | You have complete control, Can meet strict security and compliance requirements | Upfront CapEx costs, Owning equipment limits agility to scale, Requires high technical knowledge
 Hybrid | advantages of both private and public, flexibility | Can be more expensive than selecting one deployment model, Can be more complicated to set up and manage, CAPEX
+
+## Core-Azure-Services
+
+#### Describe the benefit and usage of Regions 
+- A region is a set/collection of datacenters deployed within a latency-defined perimeter and connected through a dedicated regional low-latency network 
+- Is a geographical area (physical location) containing at least 1 or more datacenters that are in close proximity and networked together via low latency network 
+- Pick a region that closest to users; pick a region due to cost; pick a region due to compliance reasons; some regions may not have all available features
+
+![AZ and region](https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fdocs.microsoft.com%2Fen-us%2Fazure%2Fsecurity%2Ffundamentals%2Fmedia%2Fphysical-security%2Fdata-residency-boundary.png&f=1&nofb=1)
+
+Azure has some special regions that you may wish to use when building out your applications for compliance or legal purposes. These special regions include: 
+- US Gov Virginia and US Gov Iowa 
+  - A physical and logical network-isolated instance of Azure for US government agencies and partners, operated by screened US persons. Includes additional compliance certifications such as FedRAMP and DISA. Read more about Azure Government. 
+- China East and China North 
+  - These regions are available through a unique partnership between Microsoft and 21Vianet, whereby Microsoft does not directly maintain the datacenters. See more about Azure China 21Vianet. 
+- Germany Central and Germany Northeast 
+  - These regions are available via a data trustee model whereby customer data remains in Germany under control of T-Systems, a Deutsche Telekom company, acting as the German data trustee. 
+
+Each Azure region is paired with another region within same geography 
+- Allows for replication of resources 
+- 300 miles of separation between regions
+- Region pairs must be in same geography
+- One region out of every pair is prioritized to help reduce time it takes to restore applications, etc. 
+  - Planned updates are rolled out to paired regions, one region at a time 
+  - Data resides in same geography as its pair for tax/law jurisdiction purposes 
+
+![geo](https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fdocs.microsoft.com%2Fen-us%2Fazure%2Fmedia%2Fbest-practices-availability-paired-regions%2Fpairedregionsoverview2.png&f=1&nofb=1)
+
+Azure is generally available in 52+ regions worldwide with plans to announce 6+ in future 
+- Minimum 3 zones in each region 
+- some services or VM features are only available in certain regions; some products are only available in certain regions 
+ 
+Geography – is a discrete market typically containing 2 or more regions that preserve data residency and compliance boundaries 
+- Allows customers with specific data residency and compliance needs to keep their data and applications close 
+- Americas, Europe, Asia Pacific, Middle East, Africa 
+ 
+Hierarchy: Geography -> Region -> Availability Zone -> Availability Set -> Fault Domain -> Update Domain 
+
+#### Describe the benefit and usage of Availability Zones 
+- Availability Zones are physically separate locations within an Azure region.  
+- Each Availability Zone is made up of one or more datacenters equipped with independent power, cooling, and networking. 
+- Availability Zones allow customers to run mission-critical applications with high availability and low-latency replication. 
+- is a high-availability offering that protects your applications and data from datacenter failures.  
+- Availability Zones are unique physical locations within an Azure region 
+  - minimum of 3 separate zones in all enabled regions 
+- is a combination of a fault domain and an update domain 
+  - For example, if you create three or more VMs across three zones in an Azure region, your VMs are effectively distributed across three fault domains and three update domains.   - The Azure platform recognizes this distribution across update domains to make sure that VMs in different zones are not updated at the same time. 
+- A fault domain is a logical group of underlying hardware that share a common power source and network switch, similar to a rack within an on-premises datacenter. 
+  - Physical separate
+  - Up to 5 fault domains inside an availability set
+- An update domain is a logical group of underlying hardware that can undergo maintenance or be rebooted at the same time. 
+  - Up to 20 UD in an availability set
+- This approach ensures that at least one instance of your application always remains running as the Azure platform undergoes periodic maintenance. The order of update domains being rebooted may not proceed sequentially during maintenance, but only one update domain is rebooted at a time. 
+
+![AZ](https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fdocs.microsoft.com%2Fen-us%2Fazure%2Fcloud-adoption-framework%2Fmigrate%2Fazure-best-practices%2Fmedia%2Fmigrate-best-practices-networking%2Favailability-zone.png&f=1&nofb=1)
+
+- Azure services that support Availability Zones fall into two categories: 
+  - Zonal services – you pin the resource to a specific zone (for example, virtual machines, managed disks, Standard IP addresses), or 
+  - Zone-redundant services – platform replicates automatically across zones (for example, zone-redundant storage, SQL Database). 
+- 99.99% VM uptime SLA is offered when two or more VMs are deployed across two or more Availability Zones within an Azure region 
+- No cost for deploying resources in AZ's 
+
+![storage](/assets/lrs-grs.png)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
