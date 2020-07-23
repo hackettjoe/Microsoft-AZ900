@@ -479,6 +479,163 @@ CDN 
 
 ![storage](https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fdocs.microsoft.com%2Fen-us%2Faspnet%2Faspnet%2Foverview%2Fdeveloping-apps-with-windows-azure%2Fbuilding-real-world-cloud-apps-with-windows-azure%2Fdata-storage-options%2F_static%2Fimage5.png&f=1&nofb=1)
 
+Blob Storage - Azure Blob storage is Microsoft's object storage solution for the cloud. Blob storage is optimized for storing massive amounts of unstructured data. Unstructured data is data that doesn't adhere to a particular data model or definition, such as text or binary data. 
+- Highly scalable 
+- Can manage thousands of simultaneous uploads 
+- No file format per se 
+- Tiered storage 
+ 
+Blob storage is designed for: 
+- Serving images or documents directly to a browser. 
+- Storing files for distributed access. 
+- Streaming video and audio. 
+- Writing to log files. 
+- Storing data for backup and restore, disaster recovery, and archiving. 
+- Storing data for analysis by an on-premises or Azure-hosted service. 
+- Supports Azure Data Lake storage (Gen 2) 
+- Users or client applications can access objects in Blob storage via HTTP/HTTPS
+
+Blob storage offers three types of resources: 
+- The storage account 
+- A container in the storage account 
+- A blob in a container 
+
+![blob](https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fdocs.microsoft.com%2Fen-us%2Fazure%2Fstorage%2Fblobs%2Fmedia%2Fstorage-blob-introduction%2Fblob1.png&f=1&nofb=1)
+
+Containers use a "scratch" space by default; Windows containers by default use ephemeral storage 
+- Ideal for stateless applications. 
+- They can be used with both Marketplace and custom images. 
+- Ability to fast reset or reimage VMs and scale set instances to the original boot state. 
+- Lower latency, similar to a temporary disk. 
+- Ephemeral OS disks are free, you incur no storage cost for OS disk. 
+- They are available in all Azure regions. 
+- Ephemeral OS Disk is supported by Shared Image Gallery
+
+All container I/O happens in "scratch" space and each container gets their own scratch space
+File creation and file writes are captured in the scratch space and do not escape to the host
+When a container instance is stopped, all changes that occurred in the "scratch" space are thrown away; when a new container instance is started, a new "scratch" space is provided for the instance
+
+Data Lake storage: 
+- Is a set of capabilities dedicated to big data analytics, built on Azure Blob storage
+- Data Lake Storage Gen2 is the result of converging the capabilities of our two existing storage services, Azure Blob storage and Azure Data Lake Storage Gen1
+- A fundamental part of Data Lake Storage Gen2 is the addition of a hierarchical namespace to Blob storage.
+- A superset of POSIX permissions - The security model for Data Lake Gen2 supports ACL and POSIX permissions
+- Big data analytics 
+- Hadoop compatible - allows you to manage and access data just as you would with a Hadoop Distributed File System (HDFS)
+
+Disk Storage – Managed Disks 
+Azure managed disks are block-level storage volumes that are managed by Azure and used with Azure Virtual Machines. The available types of disks are ultra disks, premium solid-state drives (SSD), standard SSDs, and standard hard disk drives (HDD). 
+
+Benefits: 
+- Highly durable and scalable 
+- Integration with availability sets 
+- Integration with availability zones 
+- Azure Backup support 
+- RBAC 
+- VHD upload 
+
+There are 3 main disk roles in Azure: the data disk, the OS disk, and the temporary disk. These roles map to disks that are attached to your virtual machine.
+
+![diskroles](https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fdocs.microsoft.com%2Fhe-il%2Fazure%2Fincludes%2Fmedia%2Fvirtual-machines-managed-disks-overview%2Fdisk-types.png&f=1&nofb=1)
+
+Data disk 
+A data disk is a managed disk that's attached to a virtual machine to store application data, or other data you need to keep. Data disks are registered as SCSI drives and are labeled with a letter that you choose. Each data disk has a maximum capacity of 32,767 gibibytes (GiB). The size of the virtual machine determines how many data disks you can attach to it and the type of storage you can use to host the disks. 
+
+OS disk 
+Every virtual machine has one attached operating system disk. That OS disk has a pre-installed OS, which was selected when the VM was created. This disk contains the boot volume. 
+- This disk has a maximum capacity of 2,048 GiB. 
+
+Temporary disk 
+Every VM contains a temporary disk, which is not a managed disk. The temporary disk provides short-term storage for applications and processes and is intended to only store data such as page or swap files. Data on the temporary disk may be lost during a maintenance event event or when you redeploy a VM. On Azure Linux VMs, the temporary disk is /dev/sdb by default and on Windows VMs the temporary disk is D: by default. During a successful standard reboot of the VM, the data on the temporary disk will persist.
+
+Managed disk snapshots 
+- A managed disk snapshot is a read-only crash-consistent full copy of a managed disk that is stored as a standard managed disk by default. With snapshots, you can back up your managed disks at any point in time. These snapshots exist independent of the source disk and can be used to create new managed disks. 
+Snapshots are billed based on the used size 
+
+Images 
+- Managed disks also support creating a managed custom image. You can create an image from your custom VHD in a storage account or directly from a generalized (sysprepped) VM. This process captures a single image. This image contains all managed disks associated with a VM, including both the OS and data disks. This managed custom image enables creating hundreds of VMs using your custom image without the need to copy or manage any storage accounts.
+
+File Storage 
+- Azure Files offers fully managed file shares in the cloud that are accessible via the industry standard Server Message Block (SMB) protocol. Azure file shares can be mounted concurrently by cloud or on-premises deployments of Windows, Linux, and macOS. Additionally, Azure file shares can be cached on Windows Servers with Azure File Sync for fast access near where the data is being used. 
+- Secures data at rest and in transit using SMB 3.0 and HTTPS 
+- Create high-performance file shares using Premium Files storage tier 
+- Compatible with Azure Files AD authentication on-premise infrastructure
+
+Benefits: 
+- Replace or supplement on-premises file servers 
+- "Lift and shift" applications 
+- Simplify cloud development 
+  - Shared application settings - A common pattern for distributed applications is to have configuration files in a centralized location where they can be accessed from many application instances. Application instances can load their configuration through the File REST API, and humans can access them as needed by mounting the SMB share locally. 
+  - Diagnostic share - An Azure file share is a convenient place for cloud applications to write their logs, metrics, and crash dumps. Logs can be written by the application instances via the File REST API, and developers can access them by mounting the file share on their local machine. This enables great flexibility, as developers can embrace cloud development without having to abandon any existing tooling they know and love. 
+  - Dev/Test/Debug - When developers or administrators are working on VMs in the cloud, they often need a set of tools or utilities. Copying such utilities and tools to each VM can be a time consuming exercise. By mounting an Azure file share locally on the VMs, a developer and administrator can quickly access their tools and utilities, no copying required
+
+Azure Files can be deployed in two main ways: by directly mounting the serverless Azure file shares or by caching Azure file shares on-premises using Azure File Sync 
+- Azure File Sync – a method to ingest data into an Azure file share 
+- Maintains ACL's and timestamps 
+- Azure file shares are deployed into storage accounts, which are top-level objects that represent a shared pool of storage. This pool of storage can be used to deploy multiple file shares, as well as other storage resources such as blob containers, queues, or tables. All storage resources that are deployed into a storage account share the limits that apply to that storage account
+
+To access an Azure file share, the user of the file share must be authenticated and have authorization to access the share. This is done based on the identity of the user accessing the file share. Azure Files integrates with three main identity providers: 
+1. Customer-owned Active Directory 
+2. Azure Active Directory Domain Services (Azure AD DS) 
+3. Azure storage account key
+
+Azure Files supports two different types of encryption: encryption in transit, which relates to the encryption used when mounting/accessing the Azure file share, and encryption at rest, which relates to how the data is encrypted when it is stored on disk.
+
+Encryption in transit 
+- By default, all Azure storage accounts have encryption in transit enabled. This means that when you mount a file share over SMB or access it via the FileREST protocol (such as through the Azure portal, PowerShell/CLI, or Azure SDKs), Azure Files will only allow the connection if it is made with SMB 3.0+ with encryption or HTTPS
+
+Encryption at rest 
+- All data stored in Azure Files is encrypted at rest using Azure storage service encryption (SSE). Storage service encryption works similarly to BitLocker on Windows: data is encrypted beneath the file system level. Because data is encrypted beneath the Azure file share's file system, as it's encoded to disk, you don't have to have access to the underlying key on the client to read or write to the Azure file share. 
+- By default, data stored in Azure Files is encrypted with Microsoft-managed keys. With Microsoft-managed keys, Microsoft holds the keys to encrypt/decrypt the data, and is responsible for rotating them on a regular basis
+
+Archive Storage 
+Azure storage offers different access tiers, which allow you to store blob object data in the most cost-effective manner. The available access tiers include:
+1. Hot - Optimized for storing data that is accessed frequently.
+2. Cool - Optimized for storing data that is infrequently accessed and stored for at least 30 days.
+3. Archive - Optimized for storing data that is rarely accessed and stored for at least 180 days with flexible latency requirements (on the order of hours).
+2 hour latency (time to first byte)
+
+- Archive storage stores data offline and offers the lowest storage costs but also the highest data rehydrate and access costs
+- The archive access tier has the lowest storage cost. But it has higher data retrieval costs compared to the hot and cool tiers. Data in the archive tier can take several hours to retrieve. Data must remain in the archive tier for at least 180 days or be subject to an early deletion charge.
+- While a blob is in archive storage, the blob data is offline and can't be read, overwritten, or modified. To read or download a blob in archive, you must first rehydrate it to an online tier
+
+Usage scenarios for the archive access tier include:
+- Long-term backup, secondary backup, and archival datasets
+- Original (raw) data that must be preserved, even after it has been processed into final usable form.
+- Compliance and archival data that needs to be stored for a long time and is hardly ever accessed
+
+Storage Tiers 
+Azure Files offers 2 different tiers of storage, premium and standard, to allow you to tailor your shares to the performance and price requirements of your scenario: 
+1. Premium file shares: Premium file shares are backed by solid-state drives (SSDs) and are deployed in the FileStorage storage account type. Premium file shares provide consistent high performance and low latency, within single-digit milliseconds for most IO operations, for IO-intensive workloads. This makes them suitable for a wide variety of workloads like databases, web site hosting, and development environments. Premium file shares are only available in a provisioned billing model. For more information on the provisioned billing model for premium file shares, see Understanding provisioning for premium file shares. 
+- Premium file shares are provisioned based on a fixed GiB/IOPS/throughput ratio 
+- Premium file shares can burst their IOPS up to a factor of three 
+
+2. Standard file shares: Standard file shares are backed by hard disk drives (HDDs) and are deployed in the general purpose version 2 (GPv2) storage account type. Standard file shares provide reliable performance for IO workloads that are less sensitive to performance variability such as general-purpose file shares and dev/test environments. Standard file shares are only available in a pay-as-you-go billing model. 
+- By default, standard file shares can span only up to 5 TiB, although the share limit can be increased to 100 TiB
+
+#### Describe products available for databases such as Cosmos DB, Azure SQL Database, Azure Database for MySQL, Azure Database for PostgreSQL, and Azure Database Migration service 
+Cosmos DB – is Microsoft's globally distributed, multi-model database service (key-value, column-family, documents, graph) 
+- Supports schema-less data with Always On applications 
+- Can add data concurrently from multiple regions 
+- Can store JSON documents 
+- 99.999% SLA for HA 
+- Is a No-SQL database / non-relational DB
+- Supports wire protocols 
+- All APIs are exposed by Cosmos DB – SQL, MongoDB, Cassandra, Gremlin, and Table can be used
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
