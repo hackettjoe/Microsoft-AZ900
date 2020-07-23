@@ -623,6 +623,157 @@ Cosmos DB – is Microsoft's globally distributed, multi-model database service 
 - Supports wire protocols 
 - All APIs are exposed by Cosmos DB – SQL, MongoDB, Cassandra, Gremlin, and Table can be used
 
+Benefits 
+- Turnkey global distribution – replicates data wherever you are 
+- Always On – with multi-master replication capabilities 
+- Scalability and throughput of storage – writes and reads across global servers; increase scale easily 
+- Optimized latency – less than 10ms reads/writes 
+- Multiple consistency options – strong, bound staleness, session, consistent prefix, and eventual 
+- No schema or index management – database engine is schema-agnostic 
+- Battle tested – works for MSFT office, XBox, O365, Skype, etc
+
+![consistency](https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fdocs.microsoft.com%2Fen-gb%2Fazure%2Fcosmos-db%2Fmedia%2Fconsistency-levels%2Ffive-consistency-levels.png&f=1&nofb=1)
+
+Cosmos DB is great for: 
+- Any web, mobile, gaming, and IoT application that needs to handle massive amounts of data, reads, and writes at a global scale with near-real response times for a variety of data 
+- Near real-time response times 
+- Low latency, high throughput 
+- Cosmos DB can run Apache Spark 
+ 
+Partitioning 
+- Uses partitioning to scale individual containers in a DB to meet the performance needs of the application 
+- Divided into distinct subsets called logical partitions 
+ 
+Provisioned Throughput 
+- You pay for the throughput you provision per hour 
+- Ensures sufficient system resources are available for Azure Cosmos DB; expressed by request units (RU's) 
+ 
+Use Cases 
+1. web / retail / marketing 
+2. mobile 
+3. gaming 
+4. IoT / Telematics
+
+Azure SQL Database – general purpose relational database, provided as a managed service 
+- Is a fully managed PaaS Database Engine that handles upgrades, patching, backup, and monitoring 
+- Predictable performance, dynamic scalability (manual scaling) 
+- Available in 38 datacenters 
+- Process both relational data and non-relational data (graphs, JSON, spatial, XML) 
+- Uses latest Microsoft SQL Server database engine 
+ 
+Use Cases 
+1. modern cloud applications 
+2. high performance in-memory & intelligent query processing 
+3. backup
+
+![azuresql](https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fdocs.microsoft.com%2Fen-us%2Fazure%2Fsql-database%2Fmedia%2Fsql-database-paas-vs-sql-server-iaas%2Fsqliaas_sql_server_cloud_continuum.png&f=1&nofb=1)
+
+Azure SQL Deployment Models
+
+![deplymentmodels](https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fdocs.microsoft.com%2Fen-ca%2Fazure%2Fsql-database%2Fmedia%2Fsql-database-technical-overview%2Fdeployment-options.png&f=1&nofb=1)
+
+- Single Database represents a fully managed, isolated database. You might use this option if you have modern cloud applications and microservices that need a single reliable data source. A single database is similar to a contained database in Microsoft SQL Server Database Engine. 
+- Managed instance is a fully managed instance of the Microsoft SQL Server Database Engine. It contains a set of databases that can be used together. Use this option for easy migration of on-premises SQL Server databases to the Azure cloud, and for applications that need to use the database features that SQL Server Database Engine provides. 
+- Elastic pool is a collection of single databases with a shared set of resources, such as CPU or memory. Single databases can be moved into and out of an elastic pool
+
+Purchasing Models 
+1. vCore-based (recommended) - independently choose compute and storage resources; allows you to use Azure Hybrid Benefit for SQL Server to gain cost savings 
+Best for customers who value flexibility, control, and transparency 
+2. DTU-based (Database Transaction Unit) - based on a bundled compute and storage packages balanced for common workloads; differentiated by a range of compute sizes with a fixed amount of included storage, retention period for backups, and a fixed price 
+  - Best for customers who want preconfigured resource options
+
+SQL Database offers the following purchasing models: 
+- The vCore-based purchasing model lets you choose the number of vCores, the amount of memory, and the amount and speed of storage. The vCore-based purchasing model also allows you to use Azure Hybrid Benefit for SQL Server to gain cost savings. For more information about the Azure Hybrid Benefit, see the "Frequently asked questions" section later in this article. 
+- The DTU-based purchasing model offers a blend of compute, memory, and I/O resources in three service tiers, to support light to heavy database workloads. Compute sizes within each tier provide a different mix of these resources, to which you can add additional storage resources. 
+- The serverless model automatically scales compute based on workload demand, and bills for the amount of compute used per second. The serverless compute tier also automatically pauses databases during inactive periods when only storage is billed, and automatically resumes databases when activity returns
+
+Service tiers 
+Azure SQL Database offers three service tiers that are designed for different types of applications: 
+- General Purpose/Standard service tier designed for common workloads. It offers budget-oriented balanced compute and storage options. 
+- Business Critical/Premium service tier designed for OLTP applications with high transaction rate and lowest-latency I/O. It offers the highest resilience to failures by using several isolated replicas. 
+- Hyperscale service tier designed for very large OLTP database and the ability to auto-scale storage and scale compute fluidly
+
+Azure Database for MySQL – is a relational database service in Azure based on the MySQL Community Edition (GPLv2 license); versions 5.6, 5.7, and 8.0 
+- Built-in high availability with no additional cost
+- Most used database / most popular
+- PHP & Python apps
+
+Use Cases
+- Developed for SaaS and web applications
+- Enterprise content management
+- E-comm and payment platforms
+- Gaming 
+- Predictable performance, using inclusive pay-as-you-go pricing. 
+- Scale as needed within seconds. 
+- Secured to protect sensitive data at-rest and in-motion. 
+- Automatic backups and point-in-time-restore for up to 35 days. 
+- Enterprise-grade security and compliance — integrated with Advanced Threat Protection (ATP)
+- PAY GO model 
+- Fault Tolerance 
+- Automatic patching service 
+- Automatic backups 
+
+Pricing Model 
+Is priced per server based on the configuration of pricing tier, vCores, and storage
+
+An Azure Database for MySQL server: 
+- Is created within an Azure subscription. 
+- Is the parent resource for databases. 
+- Provides a namespace for databases. 
+- Is a container with strong lifetime semantics - delete a server and it deletes the contained databases. 
+- Collocates resources in a region. 
+- Provides a connection endpoint for server and database access. 
+- Provides the scope for management policies that apply to its databases: login, firewall, users, roles, configurations, etc. 
+- Is available in multiple versions. For more information, see Supported Azure Database for MySQL database versions
+
+Azure Database for PostgreSQL – is a relational database service in Azure for developers 
+- Is based on the community version of open source PostgreSQL database engine 
+- PAY GO model 
+- Vertical scaling / scale up 
+- Query parallelization 
+- Multi-tenant applications 
+- Realtime processing analytics
+
+2 Deployment Models 
+1. Azure Database for PostgreSQL - Single Server 
+  - Built-in high availability with no additional cost (99.99% SLA) 
+  - Predictable performance, using inclusive pay-as-you-go pricing 
+  - Vertical scale as needed within seconds 
+  - Monitoring and alerting to assess your server 
+  - Enterprise-grade security and compliance 
+  - Secured to protect sensitive data at-rest and in-motion 
+  - Automatic backups and point-in-time-restore for up to 35 days 
+  - offers three pricing tiers: Basic, General Purpose, and Memory Optimized 
+
+2. Azure Database for PostgreSQL - Hyperscale (Citus) 
+  - Horizontal scaling across multiple machines using sharding 
+  - Query parallelization across these servers for faster responses on large datasets 
+  - Excellent support for multi-tenant applications, real time operational analytics, and high throughput transactional workloads 
+  - The Hyperscale (Citus) hosting type allows Azure Database for PostgreSQL servers (called nodes) to coordinate with one another in a "shared nothing" architecture. The nodes in a server group collectively hold more data and use more CPU cores than would be possible on a single server. The architecture also allows the database to scale by adding more nodes to the server group.
+  - Microsoft aims to support n-2 versions of the PostgreSQL engine in Azure Database for PostgreSQL - Single Server. The versions would be the current major version on Azure (n) and the two prior major versions (-2) 
+  - PostgreSQL 9.5, 9.6, 10, and 11
+
+Azure Database Migration service – is a fully managed service designed to enable seamless migrations from multiple database sources to Azure data platforms with minimal downtime (online migrations)
+- The service uses the Data Migration Assistant to generate assessment reports that provide recommendations to guide you through the changes required prior to performing a migration
+- Azure Database Migration Service is designed to support different migration scenarios (source/target pairs) for both offline (one-time) and online (continuous sync) migrations
+
+The Standard pricing tier supports offline (also called “one-time”) migrations. The Standard pricing tier, which offers 1-, 2-, and 4-vCore options, is generally available and free to customers.
+
+The Premium pricing tier supports offline and online migrations (also called "continuous migration") for business critical workloads that require minimal downtime. The Premium pricing tier is generally available.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
