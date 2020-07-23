@@ -262,29 +262,173 @@ Hierarchy: Geography -> Region -> Availability Zone -> Availability Set -> Fault
 
 ![storage](lrs-grs.png)
 
+#### Describe the benefit and usage of Resource Groups 
+A resource group is a container that holds related resources for an Azure solution 
+- Is a unit of management for Azure resources 
+- MUST create this first
+- Includes those resources you want to manage as a group 
+- Is a collection of azure resources — azure resources must existing in 1 and only 1 resource group
+- RBAC is included 
+ 
+You can manage: 
+- Metering and billing 
+- Policies 
+- Monitoring and alerts 
+- Quotas 
+- Access control 
+- NOTE: if you delete a resource group, all resources are also deleted 
+ 
+Resource group stores metadata about those resources 
+- Metadata follows where you put the resource group location; therefore, when you specify a location for the resource group, you are specifying where that metadata is stored 
+- Locking prevents users in your organization from accidentally deleting or modifying critical resources 
 
+![resourcelocks](https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fdocs.microsoft.com%2Fen-au%2Fazure%2Fazure-resource-manager%2Fmanagement%2Fmedia%2Fmanage-resources-portal%2Fmanage-azure-resources-portal-lock-resource.png&f=1&nofb=1)
 
+All the resources in your resource group should share the same / similar life cycle 
+- You deploy, update, and delete them together 
+- Each resource can only exist in one resource group 
+- You can add or remove a resource at any time 
+- You can move a resource from one group to another 
+- A resource group can contain resources that are located in different regions 
+- A resource group can be used to scope access control for administrative actions 
+- A resource group can interact with resources in other resource groups 
+- You can export Azure Resource Manager (ARM) templates to 1) automate future deployments, and 2) learn JSON syntax that represents a solution 
+ 
+You can apply tags to resource groups and resources to logically organize your assets. For information, see Using tags to organize your Azure resources. 
 
+#### Describe the benefit and usage of Azure Resource Manager 
+- Is the deployment and management service for Azure – provides a management layer that enables you to create, update, and delete resources in your Azure subscription 
+- Allows you to automate the deployment and configuration of resources using different tools like PowerShell, Azure CLI, Portal, REST API, and SDK 
+- A resource is a manageable item through Azure (VM, storage accounts, web apps, database's, etc) 
+ 
+You use management features like access control, locks, and tags to secure and organize resources after deployment 
+- When a user sends a request from any of the Azure tools, ARM receives this request. It then authenticates and authorizes the request. ARM sends the request to the Azure service which takes the requested action. All requests are handled through the same API and therefore has consistent results 
 
+![arm](https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fdocs.microsoft.com%2Fen-us%2Fazure%2Fazure-resource-manager%2Fmedia%2Fresource-group-overview%2Fconsistent-management-layer.png&f=1&nofb=1)
 
+ARM Template - A JavaScript Object Notation (JSON) file that defines one or more resources to deploy to a resource group or subscription. The template can be used to deploy the resources consistently and repeatedly. See Template deployment overview. 
+  
+Azure provides four levels of scope: management groups, subscriptions, resource groups, and resources. The following image shows an example of these layers. 
 
+![scopelevels](https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fdocs.microsoft.com%2Fen-in%2Fazure%2Fazure-resource-manager%2Fmedia%2Fresource-group-overview%2Fscope-levels.png&f=1&nofb=1)
 
+You apply management settings at any of these levels of scope. The level you select determines how widely the setting is applied. Lower levels inherit settings from higher levels. For example, when you apply a policy to the subscription, the policy is applied to all resource groups and resources in your subscription. When you apply a policy on the resource group, that policy is applied the resource group and all its resources. However, another resource group doesn't have that policy assignment. 
+- You can deploy templates to management groups, subscriptions, or resource groups. 
 
+Resource Manager and control plane operations (requests sent to management.azure.com) in the REST API are: 
+- Distributed across regions. Some services are regional. 
+- Distributed across Availability Zones (as well regions) in locations that have multiple Availability Zones. 
+- Not dependent on a single logical data center. 
+- Never taken down for maintenance activities. 
+ 
+Benefits: 
+- Use of declarative templates (JSON file) rather than scripts 
+- Deploy, manage, and monitor all resources for your solution as a group 
+- Capable of redeploying solution throughout development cycle 
+- Defines dependencies between resources 
+- RBAC 
+- Ability to apply tags 
+- Clarity of organizational billing via costs for groups of resources and sharing the same tag(s) 
 
+#### Describe products available for compute products such as Virtual Machines, VM Scale Sets, App Services, Azure Container Instances (ACI), Azure Kubernetes Service (AKS)  
+Virtual Machines 
+- Is one of several types of on-demand scalable computing resources that Azure offers 
+- VM's are software emulations of physical computers 
+- Are offered as IaaS 
+- single instance virtual machine SLA of 99.9% provided you deploy the VM with premium and managed storage for all disks
+- VM SLA of 99.95% when deployed with 2 VMs in an availability set
+- Virtual Machines that have two or more instances deployed across two or more Availability Zones in the same Azure region, we guarantee you will have Virtual Machine Connectivity to at least one instance at least 99.99% of the time
 
+VM Scale Sets 
+- Are Azure compute resources you can use to deploy and manage a set of identical VM's (load balanced VM's) 
+- The number of VM instances can automatically increase or decrease in response to demand or a defined schedule. Scale sets provide high availability to your applications, and allow you to centrally manage, configure, and update many VMs. We recommended that two or more VMs are created within a scale set to provide for a highly available application and to meet the 99.95% Azure SLA. 
+- There is no cost for the scale set itself, you only pay for each VM instance that you create. 
+- When a single VM is using Azure premium SSDs, the Azure SLA applies for unplanned maintenance events. Virtual machines in a scale set can be deployed across multiple update domains and fault domains to maximize availability and resilience to outages due to data center outages, and planned or unplanned maintenance events. Virtual machines in a scale set can also be deployed into a single Availability zone, or regionally. Availability zone deployment options may differ based on the orchestration mode. 
+- All VM's are the same so Scale Sets supports true autoscale (no pre-provisioning of VMs) 
+- Targets big data compute jobs and containerized workloads 
+- Manual or automated tasks 
+ 
+Typically choose a VM when you need more control over the computing environment (like the OS) 
+- Still need to maintain the VM like configuring, patching, and installing software 
+- VM use cases = Dev/Test, applications in the cloud, extend your datacenter 
+- The location specifies where the virtual hard disks (VHD) are stored 
+- HOURLY price based on VM size + operating system 
+- A VM subscription has default quota limits – current default is 20 VM's per region but can be increased via support ticket 
 
+Availability Set
+An Availability Set is a logical grouping of VMs within a datacenter that allows Azure to understand how your application is built to provide for redundancy and availability. We recommended that 2 or more VMs are created within an availability set to provide for a highly available application and to meet the 99.95% Azure SLA.  
+There is no cost for the Availability Set itself, you only pay for each VM instance that you create. When a single VM is using Azure premium SSDs, the Azure SLA applies for unplanned maintenance events. 
+- It ensures your application remains online if a high-impact maintenance event is required or hardware failure occurs 
+- In an availability set, VMs are automatically distributed across these fault domains. This approach limits the impact of potential physical hardware failures, network outages, or power interruptions. 
+- For VMs using Azure Managed Disks, VMs are aligned with managed disk fault domains when using a managed availability set. This alignment ensures that all the managed disks attached to a VM are within the same managed disk fault domain. 
+- Only VMs with managed disks can be created in a managed availability set. The number of managed disk fault domains varies by region - either two or three managed disk fault domains per region. You can read more about these managed disk fault domains for Linux VMs or Windows VMs. 
 
+![avset](https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fdocs.microsoft.com%2Fen-us%2Fazure%2Fincludes%2Fmedia%2Fvirtual-machines-common-manage-availability%2Fmd-fd-updated.png&f=1&nofb=1)
 
+Fault Domain and Update Domain
 
+![fdud](https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fdocs.microsoft.com%2Fen-us%2Fazure%2Fincludes%2Fmedia%2Fvirtual-machines-common-manage-availability%2Fud-fd-configuration.png&f=1&nofb=1)
 
+Azure App Service = PaaS
+- is an HTTP-based service for hosting web applications, REST APIs, and mobile back ends. 
+- fully managed compute platform that is optimized for hosting websites and web applications
+- can also take advantage of its DevOps capabilities, such as continuous deployment from Azure DevOps, GitHub, Docker Hub, and other sources, package management, staging environments, custom domain, and SSL certificates. 
+- With App Service, you pay for the Azure compute resources you use. The compute resources you use is determined by the App Service plan that you run your apps on 
+App Service Environment is an Azure App Service feature that provides a fully isolated and dedicated environment for securely running App Service apps at high scale. 
+- Besides App Service, Azure offers other services that can be used for hosting websites and web applications. For most scenarios, App Service is the best choice. For microservice architecture, consider Service Fabric
 
+Whatever apps you put into this App Service plan run on these compute resources as defined by your App Service plan. Each App Service plan defines: 
+1. Region (West US, East US, etc.) 
+2. Number of VM instances 
+3. Size of VM instances (Small, Medium, Large) 
+4. Pricing tier (Free, Shared, Basic, Standard, Premium, PremiumV2, Isolated) 
 
+Benefits 
+- Multiple languages supported 
+- DevOps optimization 
+- Global scale with HA 
+- SaaS and on-premise connectivity 
+- Application templates 
+- Serverless 
+- API+Mobile features 
+- Visual Studio integration 
+- Is ISO, SOC, and PCI compliant 
 
+Azure Container Instances (ACI) = PaaS
+- Is the fastest and simplest way to run a container in Azure without having to manage any virtual instances (basically containers as a service) 
+- is a great solution for any scenario that can operate in isolated containers, including simple applications, task automation, and build jobs. 
+- Is a PaaS offering 
+- Pay based on what you need and get billed by the second – PAY GO model 
+- ACI uses Azure Files shares backed by Azure Storage for persistent storage 
+- For compute-intensive jobs such as machine learning, Azure Container Instances can schedule Linux containers to use NVIDIA Tesla GPU resources (preview). 
+ 
+YAML is recommended for container deployments 
+Can use ARM templates to deploy ACI and containers 
 
+Azure Kubernetes Service (AKS) = PaaS
+- Azure Kubernetes Service (AKS) makes it simple to deploy a managed Kubernetes cluster in Azure. AKS reduces the complexity and operational overhead of managing Kubernetes by offloading much of that responsibility to Azure. As a hosted Kubernetes service, Azure handles critical tasks like health monitoring and maintenance for you. The Kubernetes masters are managed by Azure. You only manage and maintain the agent nodes. As a managed Kubernetes service, AKS is free - you only pay for the agent nodes within your clusters, not for the masters. 
+- You can create an AKS cluster in the Azure portal, with the Azure CLI, or template driven deployment options such as Resource Manager templates and Terraform. When you deploy an AKS cluster, the Kubernetes master and all nodes are deployed and configured for you. Additional features such as advanced networking, Azure Active Directory integration, and monitoring can also be configured during the deployment process. Windows Server containers support is currently in preview in AKS. 
+- AKS lets you integrate with Azure Active Directory and use Kubernetes role-based access controls. You can also monitor the health of your cluster and resources. 
 
+![aks](https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fdocs.microsoft.com%2Fda-dk%2Fazure%2Farchitecture%2Freference-architectures%2Fmicroservices%2F_images%2Faks.png&f=1&nofb=1)
 
+AKS supports Kubernetes role-based access control (RBAC). RBAC lets you control access to Kubernetes resources and namespaces, and permissions to those resources. You can also configure an AKS cluster to integrate with Azure Active Directory (AD). 
+ 
+Azure Monitor for container health collects memory and processor metrics from containers, nodes, and controllers. Container logs are available, and you can also review the Kubernetes master logs. This monitoring data is stored in an Azure Log Analytics workspace, and is available through the Azure portal, Azure CLI, or a REST endpoint. 
+ 
+AKS nodes run on Azure virtual machines. You can connect storage to nodes and pods, upgrade cluster components, and use GPUs. AKS supports Kubernetes clusters that run multiple node pools to support mixed operating systems and Windows Server containers (currently in preview). Linux nodes run a customized Ubuntu OS image, and Windows Server nodes run a customized Windows Server 2019 OS image. 
+ 
+An AKS cluster can be deployed into an existing virtual network. In this configuration, every pod in the cluster is assigned an IP address in the virtual network, and can directly communicate with other pods in the cluster, and other nodes in the virtual network. Pods can connect also to other services in a peered virtual network, and to on-premises networks over ExpressRoute or site-to-site (S2S) VPN connections. 
+ 
+AKS supports the Docker image format. For private storage of your Docker images, you can integrate AKS with Azure Container Registry (ACR). 
+ 
+Azure Kubernetes Service (AKS) is compliant with SOC, ISO, PCI DSS, and HIPAA 
 
-
+Nodes and node pools 
+To run your applications and supporting services, you need a Kubernetes node. An AKS cluster has one or more nodes, which is an Azure virtual machine (VM) that runs the Kubernetes node components and container runtime: 
+- The kubelet is the Kubernetes agent that processes the orchestration requests from the control plane and scheduling of running the requested containers. 
+- Virtual networking is handled by the kube-proxy on each node. The proxy routes network traffic and manages IP addressing for services and pods. 
+- The container runtime is the component that allows containerized applications to run and interact with additional resources such as the virtual network and storage. In AKS, Moby is used as the container runtime. (other public options are Docker, CRI-O, containerd) 
 
 
 
