@@ -761,6 +761,409 @@ The Standard pricing tier supports offline (also called “one-time”) migratio
 
 The Premium pricing tier supports offline and online migrations (also called "continuous migration") for business critical workloads that require minimal downtime. The Premium pricing tier is generally available.
 
+#### Describe Azure Marketplace 
+Azure Marketplace provides access and information on solutions and services available from Microsoft and our partners. Customers can discover, try, or buy cloud software solutions built on or for Azure. Our catalog of 8,000+ listings provides Azure building blocks, such as Virtual Machines (VMs), APIs, Azure apps, Solution Templates and managed applications, SaaS apps, containers, and consulting services. 
+- Essentially is a solution catalog of services available from MSFT and partners 
+- Offers products such as OS, databases, security solutions, identity solutions, networking, blockchain, development tools, etc 
+
+Azure Marketplace is designed for IT professionals and cloud developers interested in commercial IT software and services. 
+
+Benefits 
+- With Azure Marketplace, customers can discover technical applications built for or built on Azure. It combines Microsoft Azure's market of solutions and services into a single, unified platform to discover, try, buy, or deploy solutions in just a few clicks. 
+
+Azure Marketplace offers can be purchased through: 
+- The web-based storefront 
+- The Azure portal 
+- The Azure Command Line Interface (CLI)
+
+![storefront](https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fdocs.microsoft.com%2Fen-us%2Fazure%2Fmarketplace%2Fmedia%2Fmarketplace-publishers-guide%2Fstorefronts_options_table.png&f=1&nofb=1)
+
+- Microsoft AppSource applications are line-of-business solutions that can be built-on Azure or built-for: Dynamics 365, Office 365, Power BI, or Power Apps. AppSource consulting services are professional services offerings that help customers get started with or accelerate usage of Dynamics 365 and Power BI. 
+- Azure Marketplace applications are technical "building-block" solutions built-on or built-for Azure and intended for an IT or developer audience. Azure Marketplace consulting services are professional services offerings that help customers get started with or accelerate the use of Azure.
+
+#### Describe IoT and products that are available on Azure such as IoT Hub and IoT Central 
+IoT Hub – is a managed service in Azure that acts as a central message hub for bi-directional communication between your IoT application and the devices it manages — PaaS
+- build IoT solutions with reliable and secure communications between millions of IoT devices and a cloud-hosted solution backend 
+- IoT Hub supports communications both from the device to the cloud and from the cloud to the device 
+- IoT Hub's capabilities help you build scalable, full-featured IoT solutions such as managing industrial equipment used in manufacturing, tracking valuable assets in healthcare, and monitoring office building usage. 
+- IoT Hub scales to millions of simultaneously connected devices and millions of events per second to support your IoT workloads. 
+- Per-device authentication 
+- The IoT Hub Device Provisioning Service automatically provisions devices to the right IoT hub when the device first boots up. 
+- Uses SAS token-based authentication 
+- Individual X.509 certificate authentication 
+-X.509 CA authentication for simple, standards-based enrollment. 
+
+You can integrate IoT Hub with other Azure services to build complete, end-to-end solutions. For example, use: 
+- Azure Event Grid to enable your business to react quickly to critical events in a reliable, scalable, and secure manner. 
+- Azure Logic Apps to automate business processes. 
+- Azure Machine Learning to add machine learning and AI models to your solution. 
+- Azure Stream Analytics to run real-time analytic computations on the data streaming from your devices. 
+
+IoT Hub and the device SDKs support the following protocols for connecting devices: 
+- HTTPS 
+- AMQP 
+- AMQP over WebSockets 
+- MQTT 
+- MQTT over WebSockets
+
+Several IoT Hub features including message routing, file upload, and bulk device import/export similarly require connectivity from IoT Hub to a customer-owned Azure resource over its public endpoint. As illustrated below, these connectivity paths collectively constitute the egress traffic from IoT Hub to customer resources.
+
+![iothub](https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fdocs.microsoft.com%2Fja-jp%2Fazure%2Fiot-hub%2Fmedia%2Fvirtual-network-support%2Fpublic-endpoint.png&f=1&nofb=1)
+
+IoT Central – is an IoT application platform (SaaS) that reduces the burden and cost of developing, managing, and maintaining enterprise-grade IoT solutions 
+The IoT Central documentation refers to four personas who interact with an IoT Central application: 
+- A solution builder is responsible for defining the types of devices that connect to the application and customizing the application for the operator. 
+- An operator manages the devices connected to the application. 
+- An administrator is responsible for administrative tasks such as managing user roles and permissions within the application. 
+- A device developer creates the code that runs on a device or IoT Edge module connected to your application. 
+- IoT Central applications are fully hosted by Microsoft, which reduces the administration overhead of managing your applications. 
+
+Application templates in Azure IoT Central are a tool to help solution builders kickstart their IoT solution development. You can use app templates for everything from getting a feel for what is possible, to fully customizing and your application for resale to your customers. 
+
+Application templates consist of: 
+- Sample operator dashboards 
+- Sample device templates 
+- Simulated devices producing real-time data 
+- Pre-configured rules and jobs 
+- Rich documentation including tutorials and how-tos 
+
+As a solution builder, you use IoT Central to create a custom, cloud-hosted IoT solution for your organization. A custom IoT solution typically consists of: 
+1. A cloud-based application that receives telemetry from your devices and enables you to manage those devices. 
+2. Multiple devices running custom code connected to your cloud-based application. 
+
+Azure IoT Central uses the Azure IoT Hub Device Provisioning service (DPS) to manage all device registration and connection. 
+ 
+Using DPS enables: 
+- IoT Central to support onboarding and connecting devices at scale. 
+- You to generate device credentials and configure the devices offline without registering the devices through IoT Central UI. 
+- Devices to connect using shared access signatures. 
+- Devices to connect using industry-standard X.509 certificates. 
+- You to use your own device IDs to register devices in IoT Central. Using your own device IDs simplifies integration with existing back-office systems. 
+- A single, consistent way to connect devices to IoT Central.
+
+![iotcentral](https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fdocs.microsoft.com%2Fen-us%2Fazure%2Fiot-central%2Fretail%2Fmedia%2Farchitecture%2Fmicro-fulfillment-center-architecture-frame.png&f=1&nofb=1)
+
+#### Describe big data & analytics and products that are available such as Azure Synapse Analytics, HDInsight, and Azure Databricks 
+Azure Synapse Analytics – is a limitless analytics service that brings together enterprise data warehousing and big data analytics  
+- Was previously SQL Data Warehouse 
+- SQL Analytics uses a node-based architecture. Applications connect and issue T-SQL commands to a Control node, which is the single point of entry for SQL Analytics 
+
+Azure Synapse has four components: 
+- Synapse SQL: Complete T-SQL based analytics – Generally Available 
+- SQL pool (pay per DWU provisioned) 
+- SQL on-demand (pay per TB processed) – (Preview) 
+- Spark: Deeply integrated Apache Spark (Preview) 
+- Data Integration: Hybrid data integration (Preview) 
+- Studio: Unified user experience. (Preview) 
+
+Data warehousing is a key component of a cloud-based, end-to-end big data solution.
+
+![synapse](https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fdocs.microsoft.com%2Fen-us%2Fazure%2Farchitecture%2Freference-architectures%2Fdata%2Fimages%2Fenterprise-bi-synapse.png&f=1&nofb=1)
+
+Synapse SQL leverages Azure Storage to keep your user data safe. Since your data is stored and managed by Azure Storage, there is a separate charge for your storage consumption 
+
+
+HDInsight – is a managed, open source analytics service in Azure for enterprises 
+- Can use open source frameworks such as Hadoop, Apache Spark, Apache Hive, LLAP (interactive query), Kafka, Apache Storm, R, and more 
+- Is a cloud distribution of Hadoop components 
+- Processes massive amounts of data 
+
+Use Cases 
+1. Extract, transform, load (ETL), data warehouse, machine learning, IoT, data science, big data processing 
+
+Azure HDInsight can be used for a variety of scenarios in big data processing. It can be historical data (data that's already collected and stored) or real-time data (data that's directly streamed from the source). The scenarios for processing such data can be summarized in the following categories: 
+- Batch processing – ETL 
+- Data warehousing 
+- Internet of Things 
+- Data Science 
+- Hybrid - extend your existing on-premises big data infrastructure to Azure 
+
+
+Azure Databricks – is an Apache Spark-based analytics platform optimized for Azure cloud services 
+Integrated with Azure to provide a 1-click, streamlined workflow, and an interactive workspace that enables collaboration between data scientists, engineers, and business analysts 
+- Use Databricks when you want to collaborate on building machine learning solutions on Apache Spark
+
+![databricks](https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fdocs.microsoft.com%2Fen-us%2Fazure%2Fazure-databricks%2Fmedia%2Fwhat-is-azure-databricks%2Fazure-databricks-overview.png&f=1&nofb=1)
+
+Azure Databricks to read data from multiple data sources such as Azure Blob Storage, Azure Data Lake Storage, Azure Cosmos DB, or Azure SQL Data Warehouse and turn it into breakthrough insights using Spark. 
+
+Azure Databricks comprises the complete open-source Apache Spark cluster technologies and capabilities. Spark in Azure Databricks includes the following components:
+
+![spark](https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fdocs.microsoft.com%2Fen-us%2Fazure%2Fazure-databricks%2Fmedia%2Fwhat-is-azure-databricks%2Fapache-spark-ecosystem-databricks.png&f=1&nofb=1)
+
+Azure Databricks builds on the capabilities of Spark by providing a zero-management cloud platform that includes: 
+- Fully managed Spark clusters 
+- An interactive workspace for exploration and visualization 
+- A platform for powering your favorite Spark-based applications 
+- The Workspace is an environment for accessing all of your Azure Databricks assets. The Workspace organizes objects (notebooks, libraries, dashboards, and experiments) into folders and provides access to data objects and computational resources. 
+
+The Databricks Runtime is built on top of Apache Spark and is natively built for the Azure cloud. 
+- With the Serverless option, Azure Databricks completely abstracts out the infrastructure complexity and the need for specialized expertise to set up and configure your data infrastructure 
+
+Azure Databricks provides enterprise-grade Azure security, including Azure Active Directory integration, role-based controls, and SLAs
+
+#### Describe Artificial Intelligence (AI) and products that are available such as Azure Machine Learning and Azure Machine Learning Studio (classic) 
+Artificial Intelligence (AI) - AI is the capability of a machine to imitate intelligent human behavior. Through AI, machines can analyze images, comprehend speech, interact in natural ways and make predictions using data 
+
+Azure Machine Learning – can be used for any kind of machine learning, from classic ML to deep learning, supervised, and unsupervised learning 
+- Provides a cloud-based environment to develop, train, test, deploy, manage, and track machine learning models 
+- Python support
+- Provides central management of scripts and run history, making it easy to compare model versions
+- TensorFlow, PyTorch, and scikit-learn 
+- Can automate model generation and tuning 
+- Can use this service in a container like Docker 
+
+Machine learning is a data science technique that allows computers to use existing data to forecast future behaviors, outcomes, and trends. By using machine learning, computers learn without being explicitly programmed. 
+
+Azure Machine Learning provides all the tools developers and data scientists need for their machine learning workflows, including: 
+- The Azure Machine Learning designer (preview): drag-n-drop modules to build your experiments and then deploy pipelines. 
+- Jupyter notebooks: use our example notebooks or create your own notebooks to leverage our SDK for Python samples for your machine learning. 
+- R scripts or notebooks in which you use the SDK for R to write your own code, or use the R modules in the designer. 
+- Visual Studio Code extension 
+- Machine learning CLI 
+- Open-source frameworks such as PyTorch, TensorFlow, and scikit-learn and many more 
+
+The machine learning model workflow generally follows this sequence: 
+1. Train 
+2. Develop machine learning training scripts in Python, R, or with the visual designer. 
+3. Create and configure a compute target. 
+4. Submit the scripts to a configured compute target to run in that environment. During training, the scripts can read from or write to datastores. The logs and output produced during training are saved as runs in the workspace and grouped under experiments. 
+5. Package - After a satisfactory run is found, register the persisted model in the model registry. 
+6. Validate - Query the experiment for logged metrics from the current and past runs. If the metrics don't indicate a desired outcome, loop back to step 1 and iterate on your scripts. 
+7. Deploy - Develop a scoring script that uses the model and Deploy the model as a web service in Azure, or to an IoT Edge device. 
+8. Monitor - Monitor for data drift between the training dataset and inference data of a deployed model. When necessary, loop back to step 1 to retrain the model with new training data. 
+
+Azure Machine Learning Studio (classic) - is a collaborative, drag-and-drop tool you can use to build, test, and deploy predictive analytics solutions on your data. Azure Machine Learning Studio (classic) publishes models as web services that can easily be consumed by custom apps or BI tools such as Excel.
+- Studio (classic) gives you an interactive, visual workspace that you can use to easily and quickly build, test, and deploy models using pre-built machine learning algorithms
+- Uses Python and R
+- Only cloud-based option…no offline use
+
+#### Describe server less computing and Azure products such as Azure Functions, Logic Apps, and Event Grid
+Azure Functions - allows you to run small pieces of code (called "functions") without worrying about application infrastructure. 
+- A function is "triggered" by a specific type of event. Supported triggers include responding to changes in data, responding to messages, running on a schedule, or as the result of an HTTP request. 
+- Azure Functions is a serverless compute service, whereas Azure Logic Apps provides serverless workflows. 
+
+Features: 
+- Serverless applications: Functions allow you to develop serverless applications on Microsoft Azure. 
+- Pay-per-use pricing model: Pay only for the time spent running your code. See the Consumption hosting plan option in the pricing section. 
+- Integrated security: Protect HTTP-triggered functions with OAuth providers such as Azure Active Directory, Facebook, Google, Twitter, and Microsoft Account. 
+- Stateful serverless architecture: Orchestrate serverless applications with Durable Functions. 
+- Open-source: The Functions runtime is open-source and available on GitHub. 
+
+Use Cases 
+1. Functions is a great solution for processing bulk data, integrating systems, working with the internet-of-things (IoT), and building simple APIs and micro-services. 
+2. Run code based on HTTP requests 
+3. Blob storage: Process new and modified Azure Storage blobs 
+4. Azure Cosmos DB: Process new and modified Azure Cosmos DB documents 
+
+Azure Functions has 3 kinds of pricing plans. Choose the one that best fits your needs: 
+- Consumption plan: Azure provides all of the necessary computational resources. You don't have to worry about resource management, and only pay for the time that your code runs. 
+- Premium plan: You specify a number of pre-warmed instances that are always online and ready to immediately respond. When your function runs, Azure provides any additional computational resources that are needed. You pay for the pre-warmed instances running continuously and any additional instances you use as Azure scales your app in and out. 
+- App Service plan: Run your functions just like your web apps. If you use App Service for your other applications, your functions can run on the same plan at no additional cost.
+
+When creating a function app, you must create or link to a general-purpose Azure Storage account that supports Blob, Queue, and Table storage. This is because Functions relies on Azure Storage for operations such as managing triggers and logging function executions 
+
+The execution cost of a single function execution is measured in GB-seconds. Execution cost is calculated by combining its memory usage with its execution time. A function that runs for longer costs more, as does a function that consumes more memory. 
+
+Logic Apps - is a cloud service that helps you schedule, automate, and orchestrate tasks, business processes, and workflows 
+- Is a serverless offering 
+- 200+ connectors 
+- Pre-built API's 
+
+For example, here are just a few workloads you can automate with logic apps: 
+- Process and route orders across on-premises systems and cloud services. 
+- Send email notifications with Office 365 when events happen in various systems, apps, and services. 
+- Move uploaded files from an SFTP or FTP server to Azure Storage. 
+- Monitor tweets for a specific subject, analyze the sentiment, and create alerts or tasks for items that need review. 
+
+- choose from a growing gallery with hundreds of ready-to-use connectors, which include services such as Azure Service Bus, Azure Functions, Azure Storage, SQL Server, Office 365, Dynamics, Salesforce, BizTalk, SAP, Oracle DB, file shares, and more. Connectors provide triggers, actions, or both for creating logic apps that securely access and process data in real time. 
+
+Every logic app workflow starts with a trigger, which fires when a specific event happens, or when new available data meets specific criteria. Many triggers provided by the connectors in Logic Apps include basic scheduling capabilities so that you can set up how regularly your workloads run. 
+
+Each time that the trigger fires, the Logic Apps engine creates a logic app instance that runs the actions in the workflow. These actions can also include data conversions and workflow controls, such as conditional statements, switch statements, loops, and branching. For example, this logic app starts with a Dynamics 365 trigger with the built-in criteria "When a record is updated". If the trigger detects an event that matches this criteria, the trigger fires and runs the workflow's actions. Here, these actions include XML transformation, data updates, decision branching, and email notifications. 
+
+For more custom logic apps, you can create or edit logic app definitions in JavaScript Object Notation (JSON) by working in the "code view" editor. You can also use Azure PowerShell commands and Azure Resource Manager templates for select tasks. Logic apps deploy and run in the cloud on Azure.  
+
+Uses a consumption-based pricing model
+
+Event Grid – build applications with event-based architectures; Pub-Sub offering 
+- First, select the Azure resource you would like to subscribe to, and then give the event handler or WebHook endpoint to send the event to. Event Grid has built-in support for events coming from Azure services, like storage blobs and resource groups. Event Grid also has support for your own events, using custom topics. 
+- Is a fully managed event routing service that uses a PUB-SUB model for event consumption 
+- Can handle millions of events per second – high throughput 
+- Reliability = 24 hour retry
+
+![eventgrid](https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fdocs.microsoft.com%2Fen-us%2Fazure%2Fevent-grid%2Fmedia%2Foverview%2Fevent-grid-functional-model.png&f=1&nofb=1)
+
+There are five concepts in Azure Event Grid that let you get going: 
+1. Events - What happened. 
+2. Event sources - Where the event took place. 
+3. Topics - The endpoint where publishers send events. 
+4. Event subscriptions - The endpoint or built-in mechanism to route events, sometimes to more than one handler. Subscriptions are also used by handlers to intelligently filter incoming events. 
+5. Event handlers - The app or service reacting to the event. 
+
+Use Cases 
+- Build serverless application architectures 
+- Ops automation 
+- Application integration 
+
+Azure Event Grid uses a pay-per-event pricing model, so you only pay for what you use. The first 100,000 operations per month are free. Operations are defined as event ingress, subscription delivery attempts, management calls, and filtering by subject suffix.
+
+#### Describe DevOps solutions available on Azure such as Azure DevOps and Azure DevTest Labs
+Azure DevOps – provides developer services to support teams to plan work, collaborate on code development, and build/deploy applications 
+- Azure DevOps Server was formerly named Visual Studio Team Foundation Server (TFS). 
+
+Azure DevOps provides integrated features that you can access through your web browser or IDE client. You can use one or more of the following services based on your business needs: 
+- Azure Repos provides Git repositories or Team Foundation Version Control (TFVC) for source control of your code 
+- Azure Pipelines provides build and release services to support continuous integration and delivery of your apps 
+- Azure Boards delivers a suite of Agile tools to support planning and tracking work, code defects, and issues using Kanban and Scrum methods 
+- Azure Test Plans provides several tools to test your apps, including manual/exploratory testing and continuous testing 
+- Azure Artifacts allows teams to share Maven, npm, and NuGet packages from public and private sources and integrate package sharing into your CI/CD pipelines 
+
+Azure DevOps Services also gives you access to cloud build and deployment servers, and application insights. 
+
+Azure DevOps Services is the cloud offering that provides a scalable, reliable, and globally available hosted service. It's backed by a 99.9% SLA, monitored by our 24/7 operations team, and available in local data centers around the world. 
+
+Azure DevOps Server is the on-premises offering that's built on a SQL Server back end. Companies usually choose on-premises when they need their data to stay within their network or when they want access to SQL Server reporting services that integrate with Azure DevOps data and tools. 
+
+Azure DevTest Labs -  enables developers on teams to self-manage virtual machine and PaaS resources without having to wait for approvals 
+- DevTest Labs creates labs consisting of pre-configured bases or Azure Resource Manager templates 
+- Spin up an empty resource group (sandbox) by using Resource Manager templates 
+
+By using DevTest Labs, you can test the latest versions of your applications by doing the following tasks: 
+Quickly provision Windows and Linux environments by using reusable templates and artifacts. 
+Easily integrate your deployment pipeline with DevTest Labs to provision on-demand environments. 
+Scale up your load testing by provisioning multiple test agents and create pre-provisioned environments for training and demos. 
+
+
+DevTest Labs provides the following capabilities to developers working with VMs: 
+- Create VMs quickly by following fewer than five simple steps. 
+- Choose from a curated list of VM bases that are configured, approved, and authorized by the team lead or central IT. 
+- Create VMs from pre-created custom images that have all the software and tools already installed. 
+- Create VMs from formulas that are essentially custom images combined with the latest builds of the software that's installed when the VMs are created. 
+- Install artifacts that are extensions deployed on VMs after they're provisioned. 
+- Set auto-shutdown and auto-start schedules on VMs. 
+- Claim a pre-created VM without going through the creation process. 
+
+
+DevTest Labs lets you create pre-provisioned environments equipped with everything your team needs to develop and test applications 
+- Capture and share PaaS environment templates and artifacts within your team or organization—all in source control—to easily create developer and test environments. 
+- DevTest Labs enables your developers and testers to quickly and easily create IaaS VMs and PaaS resources by using a set of pre-configured resources. 
+- Use pre-made plug-ins or the API to provision development/testing environments directly from your preferred continuous integration (CI) tool, integrated development environment (IDE), or automated release pipeline. 
+
+#### Describe Azure tools such as Azure Portal, PowerShell, CLI, and Cloud Shell
+Azure Portal - is a web-based, unified console that provides an alternative to command-line tools. 
+- manage your Azure subscription 
+- can build, manage, and monitor everything from simple web apps to complex cloud deployments 
+- custom dashboards for an organized view of resources 
+- Portal.azure.com 
+
+Azure CLI - is a set of commands used to create and manage Azure resources 
+- Is available to install in Windows, macOS, and Linux environments. 
+- Can also be run in Docker and Azure Cloud Shell. 
+- Offers command-line flexibility when managing an Azure solution. 
+- Supports long-running operations. 
+- Has the ability to use one subscription for all commands, or vary subscriptions per command. 
+- Allows for querying of command-line results with query output returned in your format of choice. 
+- Has the flexibility to work with multiple clouds. 
+- Provides configurable settings for logging, data collection, and default argument values. 
+- Is deployed with Resource Manager deployment templates. 
+
+The current version of the Azure CLI is 2.3.1. (as of this writing)
+- Can be run in Docker and Azure Cloud Shell 
+- The easiest way to get started is by running it in an Azure Cloud Shell environment through browser 
+
+Cloud Shell - is an interactive, authenticated, browser-accessible shell for managing Azure resources 
+Bash or PowerShell 
+
+Cloud Shell is managed by Microsoft so it comes with popular command-line tools and language support. Cloud Shell also securely authenticates automatically for instant access to your resources through the Azure CLI or Azure PowerShell cmdlets. 
+
+Cloud Shell offers an integrated graphical text editor based on the open-source Monaco Editor 
+
+Cloud Shell machines are temporary, but your files are persisted in two ways: through a disk image, and through a mounted file share named clouddrive. On first launch, Cloud Shell prompts to create a resource group, storage account, and Azure Files share on your behalf. This is a one-time step and will be automatically attached for all sessions. A single file share can be mapped and will be used by both Bash and PowerShell in Cloud Shell. 
+
+
+#### Describe Azure Advisor
+Azure Advisor - is a personalized cloud consultant that helps you follow best practices to optimize your Azure deployments 
+- analyzes your resource configuration and usage telemetry and then recommends solutions that can help you improve the cost effectiveness, performance, high availability, and security of your Azure resources. 
+- proactive, actionable, and personalized best practices recommendations. 
+- The Advisor dashboard displays personalized recommendations for all your subscriptions 
+
+The recommendations are divided into 5 categories: 
+1. High Availability - To ensure and improve the continuity of your business-critical applications. For more information, see Advisor High Availability recommendations. 
+VM Fault tolerance, availability sets, use managed disks, application gateway fault tolerance 
+2. Security - To detect threats and vulnerabilities that might lead to security breaches. For more information, see Advisor Security recommendations. 
+3. Performance - To improve the speed of your applications. For more information, see Advisor Performance recommendations. 
+Reduce TTL settings, VM premium storage 
+4. Cost - To optimize and reduce your overall Azure spending. For more information, see Advisor Cost recommendations. 
+Shut down underutilized instances, eliminate unprovisioned ExpressRoute circuits, reconfigure idle VNet Gateways, purchase reserved instances 
+5. Operational Excellence - To help you achieve process and workflow efficiency, resource manageability and deployment best practices. . For more information, see Advisor Operational Excellence recommendations. 
+
+You can access Advisor recommendations as Owner, Contributor, or Reader of a subscription. 
+
+Advisor provides recommendations for Application Gateway, App Services, availability sets, Azure Cache, Azure Data Factory, Azure Database for MySQL, Azure Database for PostgreSQL, Azure Database for MariaDB, Azure ExpressRoute, Azure Cosmos DB, Azure public IP addresses, SQL Data Warehouse, SQL servers, storage accounts, Traffic Manager profiles, and virtual machines. 
+- Azure Advisor also includes your recommendations from Azure Security Center which may include recommendations for additional resource types.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
