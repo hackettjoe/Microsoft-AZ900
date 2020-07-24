@@ -1601,80 +1601,258 @@ Customer data in the two datacenters is managed under the control of a data trus
 21Vianet
 Microsoft Azure operated by 21Vianet (Azure China) is a physically separated instance of cloud services located in China. It's independently operated and transacted by Shanghai Blue Cloud Technology Co., Ltd. ("BlueCloud"), a wholly owned subsidiary of Beijing 21Vianet Broadband Data Center Co., Ltd. ("21Vianet"). 
 
+#### Describe an Azure Subscription
+A subscription is an agreement with MSFT to use one or more MSFT cloud platforms or services for which charges accrue based on either a per-user license fee or on cloud-based resource consumption 
+Subscription: A logical container for your resources. Each Azure resource is associated with only one subscription. Creating a subscription is the first step in adopting Azure. 
+
+An Azure subscription serves several purposes. An Azure subscription is: 
+- A legal agreement. Each subscription is associated with an Azure offer (such as a Free Trial or Pay-As-You-Go). Each offer has a specific rate plan, benefits, and associated terms and conditions. You choose an Azure offer when you create a subscription. 
+- A payment agreement. When you create a subscription, you provide payment information for that subscription, such as a credit card number. Each month, the costs incurred by the resources deployed to that subscription are calculated and billed via that payment method. 
+- A boundary of scale. Scale limits are defined for a subscription. The subscription's resources can't exceed the set scale limits. For example, there's a limit on the number of virtual machines that you can create in a single subscription. 
+- An administrative boundary. A subscription can act as a boundary for administration, security, and policy. Azure also provides other mechanisms to meet these needs, such as management groups, resource groups, and role-based access control. 
+
+The account administrator role for an Azure subscription is assigned to the email account that's used to create the Azure subscription. The account administrator is the billing owner of the subscription. 
+
+Every Azure resource is logically associated with only one subscription. When you create a resource, you choose which Azure subscription to deploy that resource to. You can move a resource to another subscription later. 
+
+A subscription isn't tied to a specific Azure region. However, each Azure resource is deployed to only one region. You can have resources in multiple regions that are associated with the same subscription. 
+
+#### Describe the uses and options with Azure subscriptions such as control and offer types
+Azure subscription types:
+- Free — New users will receive $200 credits to spend on any Azure products in the first 30 days. We will also receive free access to popular Azure products for the first 12 months, and the free access to free products forever. This type of subscript require credit card details, but nothing will be charged until we decide to upgrade to pay-as-you-go subscription.
+- Pay-as-you-go (PAYG) — Charge monthly for the services used in the last billing period. This type is used by individuals and businesses.
+- Enterprise Agreement — Enterprises can make an agreement with Azure which would allow discounted price for software license and Azure services.
+- Student — Students will receive $100 credit to spend in the first 12 months. No credit card required for this subscription type, but the student email verification is required.
+
+#### Describe subscription management using Azure Management Groups
+Azure management groups provide a level of scope above subscriptions. You organize subscriptions into containers called "management groups" and apply your governance conditions to the management groups. All subscriptions within a management group automatically inherit the conditions applied to the management group. All subscriptions within a single management group must trust the same Azure Active Directory tenant. 
+
+For example, you can apply policies to a management group that limits the regions available for virtual machine (VM) creation. This policy would be applied to all management groups, subscriptions, and resources under that management group by only allowing VMs to be created in that region. 
+
+![mgmt](https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fdocs.microsoft.com%2Fen-us%2Fazure%2Farchitecture%2Fcloud-adoption%2F_images%2Fgovernance%2Fmid-market-resource-organization.png&f=1&nofb=1)
+
+**Important facts about management groups**
+- 10,000 management groups can be supported in a single directory. 
+- A management group tree can support up to 6 levels of depth. 
+- This limit doesn't include the Root level or the subscription level. 
+- Each management group and subscription can only support one parent. 
+- Each management group can have many children. 
+- All subscriptions and management groups are within a single hierarchy in each directory. See Important facts about the Root management group. 
+
+Each directory is given a single top-level management group called the "Root" management group. This root management group is built into the hierarchy to have all management groups and subscriptions fold up to it. This root management group allows for global policies and RBAC assignments to be applied at the directory level. The Azure AD Global Administrator needs to elevate themselves to the User Access Administrator role of this root group initially. After elevating access, the administrator can assign any RBAC role to other directory users or groups to manage the hierarchy. As administrator, you can assign your own account as owner of the root management group. 
+
+**Important facts about the Root management group**
+- By default, the root management group's display name is Tenant root group. The ID is the Azure Active Directory ID. 
+- To change the display name, your account must be assigned the Owner or Contributor role on the root management group. See Change the name of a management group to update the name of a management group. 
+- The root management group can't be moved or deleted, unlike other management groups. 
+- All subscriptions and management groups fold up to the one root management group within the directory. 
+- All resources in the directory fold up to the root management group for global management. 
+- New subscriptions are automatically defaulted to the root management group when created. 
+- All Azure customers can see the root management group, but not all customers have access to manage that root management group. 
+- Everyone who has access to a subscription can see the context of where that subscription is in the hierarchy. 
+- No one is given default access to the root management group. Azure AD Global Administrators are the only users that can elevate themselves to gain access. Once they have access to the root management group, the global administrators can assign any RBAC role to other users to manage it. 
+
+Any assignment of user access or policy assignment on the root management group applies to all resources within the directory.  
+
+#### Describe options for purchasing Azure products and services
+Can purchase Azure directly from Microsoft — create an account through the Azure website or your Microsoft representative…2 ways to pay
+- Through the Azure website
+- Through Microsoft sales rep
+- Can purchase Azure as part of a managed service from a Microsoft partner
+
+Use one of the following three ways to buy Azure:
+- Azure.com: Buying directly through Azure.com is the fastest and easiest way for organizations of all sizes to get started with Azure. You can manage your Azure deployments and usage yourself and get a monthly bill from Microsoft for the services used.
+- Microsoft representative: Buying Azure through a Microsoft representative is intended for large organizations or customers who already work with one. You'll also manage your Azure deployments and usage yourself and get a monthly bill from Microsoft for the services used.
+- Microsoft partner: If you buy Azure as a managed service through your partner, your partner will provide you with access to Azure, manage your billing, and provide support.
+
+#### Describe options around Azure Free Account
+Azure Free Account 
+12 months of free services
+$200 credit for 30 days to use Azure services
+Plus the “always free” options — includes 25+ services
+
+The Azure free account includes access to a number of Azure products that are free for 12 months, $200 credit to spend for the first 30 days of sign up, and access to more than 25 products that are always free
+Eligible for all new customers of Azure
+
+#### Describe the factors affecting cost such as resource types, services, locations, ingress and egress traffic
+- Resource Type: Costs are resource-specific, so the usage that a meter tracks and the number of meters associated with a resource depend on the resource type. 
+- Service: Azure usage rates and billing periods can differ between Enterprise, Web Direct, and Cloud Solution Provider (CSP) customers. Some subscription types also include usage allowances, which affect costs. 
+- Location: Azure has datacenters all over the world. Usage costs vary between locations that offer particular Azure products, services, and resources based on popularity, demand, and local infrastructure costs. 
+
+Cost Factors of Azure services:
+Resource Types — Different Azure products will have different pricing e.g. Azure VM cost will be based on the virtual machine size, operating system, usage hours, and storage size. The users can turn off virtual machine temporarily to save usage hours cost, but the storage cost will always incur.
+Subscription Types — Most users will pay the standard price, while the enterprise customers may have discounted or stable cost.
+Locations — For some resource types, the cost will vary based on the server locations. For example, Azure VM in Japan data center might cost more than in US data center.
+Inbound and Outbound traffic — Movement of data between different data center (availability zones) or regions might incur cost.
+
+https://azure.microsoft.com/en-us/pricing/#product-pricing 
+
+VM Reserved Instances 
+Is an advanced purchase of a VM typically in 1 or 3 year terms in a specific region 
+Is an upfront cost but has substantial savings 
+Pay all upfront, or pay per month 
+
+AKS 
+Only pay for the nodes (compute), networking, and storage resources consumed by the AKS cluster 
+No charge for cluster management 
+
+ACI 
+Bill at the "container group" level which are vCPU/memory resources that can be assigned to a single container or group of containers 
+Price is based on vCPU and GB's of memory allocated to the container group itself 
+Billed per second on these usages 
 
+Storage Accounts 
+Managed Disks – Premium and Standard disks are typically billed by the size of those disks and the number of disks used PLUS the number of transactions (IOPS) and the number of outbound data transfers 
+Block Blob Storage – billed on volume of data stored, quantity and type of Blob storage used, outbound data transfers, PLUS redundancy option  
+Azure Files – Standard tier is based on used GB's and IOPS; Premium is based on provisioned GB and snapshot storage based on used GB (IOPS is free for Premium tier) 
 
+Hybrid 
+Azure Sentinel – billed based on the volume of data ingested for analysis (within Azure Monitor Log Analytics workspace); can be PAY GO or Capacity Reservations (fixed based tier) 
+ExpressRoute – Metered data plan: free inbound, outbound is predetermined rate + a fixed monthly port fee … Unlimited Plan: inbound and outbound are free but are charged a fixed monthly port fee 
+Can span across regions within same geography for free 
+ExpressRoute Global Reach add-on is additional cost 
+Azure SQL Database – priced per size (vCPUs, GB RAM, storage [first 32GB free]); can also pay for reserved instances  
 
+Azure Hybrid Benefit 
+is a pricing benefit for customers who have licenses with Software Assurance, which helps maximize the value of existing on-premises Windows Server and/or SQL Server license investments when migrating to Azure 
+Eligible customers can save up to 40% on Azure Virtual Machines and save up to 55% on Azure SQL Database (platform as a service, or PaaS) and SQL Server on Azure Virtual Machines (IaaS) with Azure Hybrid Benefit 
 
+Ingress and Egress 
+Virtual Network – charged at both ends of the peered networks; VNet Gateways are charged per time and availability 
+Bandwidth – inbound is free; outbound is charged per tiered GB/TB per month – 0-5GB / 5-10GB / etc 
 
+#### Describe Azure Zones for billing purposes
+An Azure Zone is a geographical grouping of Azure Regions for billing purpose. Data transfer pricing is based on the Zones
+Outbound data transfer is typically charged
+No charge for in-region transfers
 
+A sub-region is the lowest level geo-location that you may select to deploy your applications and associated data. For data transfers (except CDN), the following regions correspond to Zone 1, Zone 2, Zone 3, and DE Zone 1.
 
+Zone 1—Australia Central, Australia Central 2, Canada Central, Canada East, North Europe, West Europe, France Central, France South, Germany North (Public), Germany West Central (Public), Norway East, Norway West, Switzerland North, Switzerland West, UK South, UK West, Central US, East US, East US 2, North Central US, South Central US, West US, West US 2, West Central US
 
+Zone 2—East Asia, Southeast Asia, Australia East, Australia Southeast, Central India, South India, West India, Japan East, Japan West, Korea Central, Korea South
+Zone 3—Brazil South, South Africa North, South Africa West, UAE Central, UAE North
+DE Zone 1—Germany Central (Sovereign), Germany Northeast (Sovereign)
 
+#### Describe the Azure pricing calculator
+Pricing Calculator – is a tool that helps you estimate the cost of Azure products 
+Shows detailed estimates of Azure services by category 
+Can also download/export the estimate report 
 
+#### Describe the Azure TCO calculator
+Total cost of ownership Calculator – is a tool you use to estimate cost savings you can realize by migrating to Azure 
+3 steps: 1) define workloads, 2) adjust assumptions, and 3) view report 
+Enter your on-premise information + infrastructure 
+Adjust values of key assumptions that the TCO calculator makes which improves accuracy 
+Then view the report 
 
+#### Describe best practices for minimizing Azure costs such as performing cost analysis, creating spending limits and quotas, using tags to identify cost owners, using Azure reservations and using Azure Advisor recommendations
+Using Tags — As you create subscriptions and resource groups, think about the teams that are responsible for associated costs. Make sure your reporting keeps your organization in mind. Subscriptions and resource groups provide good buckets to organize and attribute spending across your organization.
+Tags provide a good way to attribute cost. You can use tags as a filter. And you can use them to group by when you analyze data and investigate costs
 
+Cost Analysis — analyze your organizational costs in-depth by slicing and dicing your costs using standard resource properties
+Estimate costs for current month
+Investigate anomalies
+Invoice reconciliation
+Internal chargeback
 
+Spending limits / quotas / budgets — Azure budgets give you the ability to set either a cost or usage-based budget with many thresholds and alerts … Azure budgets also allow you to configure an automation trigger when a given budget threshold is reached
 
+Azure Advisor — Azure Advisor is a service that, among other things, identifies virtual machines with low utilization from a CPU or network usage standpoint. From there, you can decide to either shut down or resize the machine based on the estimated cost to continue running the machines. Advisor also provides recommendations for reserved instance purchases. The recommendations are based on your last 30 days of virtual machine usage. When acted on, the recommendations can help you reduce your spending
+Size VM’s properly
 
+Azure Reservations — Azure Reservations allow you to prepay for one-year or three-years of virtual machine or SQL Database compute capacity. Pre-paying will allow you to get a discount on the resources you use. Azure reservations can significantly reduce your virtual machine or SQL database compute costs
+Reservations provide a billing discount and don't affect the runtime state of your virtual machines or SQL databases
 
+#### Describe Azure Cost Management and Billing
+You use Azure Cost Management and Billing features to conduct billing administrative tasks and manage billing access to costs. You can also use its features to monitor and control Azure spending and to optimize Azure resource use. 
+Requires an enterprise agreement (EA) 
 
+Azure Billing features are used to review your invoiced costs and manage access to billing information 
+A billing account is created when you sign up to use Azure. You use your billing account to manage your invoices, payments, and track costs. You can have access to multiple billing accounts. 
 
+Azure portal currently supports the following types of billing accounts: 
+Microsoft Online Services Program: A individual billing account for a Microsoft Online Services Program is created when you sign up for Azure through the Azure website. For example, when you sign up for an Azure Free Account, account with pay-as-you-go rates or as a Visual studio subscriber. 
 
+Enterprise Agreement: A billing account for an Enterprise Agreement is created when your organization signs an Enterprise Agreement (EA) to use Azure. 
+Microsoft Customer Agreement: A billing account for a Microsoft Customer Agreement is created when your organization works with a Microsoft representative to sign a Microsoft Customer Agreement. Some customers in select regions, who sign up through the Azure website for an account with pay-as-you-go rates or upgrade their Azure Free Account may have a billing account for a Microsoft Customer Agreement as well.  
 
+Cost management is the process of effectively planning and controlling costs involved in your business. Cost management tasks are normally performed by finance, management, and app teams 
 
+Cost Management shows organizational cost and usage patterns with advanced analytics. Reports in Cost Management show the usage-based costs consumed by Azure services and third-party Marketplace offerings 
+Predictive analytics are also available. Cost Management uses Azure management groups, budgets, and recommendations to show clearly how your expenses are organized and how you might reduce costs. 
 
+The ways that Cost Management help you plan for and control your costs include: Cost analysis, budgets, recommendations, and exporting cost management data. 
 
+3 key groups, outlined below, must be aligned in your organization to make sure that you successfully manage costs. 
+1. Finance - People responsible for approving budget requests across the organization based on cloud spending forecasts. They pay the corresponding bill and assign costs to various teams to drive accountability. 
+2. Managers - Business decision makers in an organization that need to understand cloud spending to find the best spending results. 
+3. App teams - Engineers managing cloud resources on a day-to-day basis, developing services to meet the organization's needs. These teams need the flexibility to deliver the most value in their defined budgets. 
 
+Tags provide a good way to attribute cost. You can use tags as a filter. And you can use them to group by when you analyze data and investigate costs. 
+Cost Management includes all usage and purchases, including reservations and third-party offerings for Enterprise Agreement (EA) accounts 
 
+#### Describe support plans that are available such as Basic, Developer, Standard, Professional Direct and Premier
+https://azure.microsoft.com/en-us/support/plans/ 
 
+Microsoft requires a minimum of 12 months notice before ending support for a service
 
+#### Describe how to open a support ticket
+Azure enables you to create and manage support requests, also known as support tickets. You can create and manage requests in the Azure portal
 
+https://youtu.be/gNhzR5FE9DY 
 
+To create a support request, you must be an Owner, Contributor or be assigned to the Support Request Contributor role at the subscription level. To create a support request without a subscription, for example Azure Active Directory (AAD) scenario, you must be an Admin.
 
+#### Describe available support channels outside of support plan channels
+You can raise questions on our Azure Forums. The forums are an online resource where you can connect with other Azure customers and experts to ask questions, share experiences, or find solutions. There are two forum options: MSDN and Stack Overflow. MSDN is a Microsoft online property; Stack Overflow is not associated or affiliated with Microsoft.
+MSDN Azure forums
+Stack Overflow
+Server Fault
+Microsoft General Feedback
+Twitter
 
+#### Describe Azure Knowledge Center
+AKC is like a knowledge base of questions and answers for support-related topics
+Includes questions on subscriptions, products, software, etc
+Searchable database that contains support questions and answers from community of Azure experts, developers, customers, and users
 
+#### Describe Azure Service Level Agreement
+SLA describes the commitments to uptime or connectivity for a resource 
+If Microsoft does not deliver on an SLA, you may be eligible for credit for the resource being used 
 
+SLA's capture the specific terms that define the performance standards that apply to Azure 
+SLA's describe Microsoft's commitment to providing Azure customers with certain performance standards 
+There are SLA's for individual Azure products and services 
+SLA's also specify what happens if a service or product fails to perform to a governing SLA specification (i.e. Microsoft's response) 
 
+3 Key Characteristics of SLAs for Azure 
+1. Performance targets, uptime, and connectivity guarantees – targets for some Azure services are expressed in uptime or connectivity rates 
+2. Azure Virtual Machines guarantee uptime
+- Performance targets range from 99.9% to 99.99% - three 9's or four 9's depending on Azure product or service 
+- Apply to performance criteria like uptime/response times for services – latency, database service uptimes, IOPS, etc 
+3. Service Credits – customers may have a discount applied to their Azure bill as compensation for under-performing product or service 
 
+#### Describe Composite SLAs
+Composite SLA = when combining SLAs across different service offerings
 
+Composite SLAs involve multiple services supporting an application, each with differing levels of availability. For example, consider an App Service web app that writes to Azure SQL Database. At the time of this writing, these Azure services have the following SLAs:
+App Service web apps = 99.95%
+SQL Database = 99.99%
 
+What is the maximum downtime you would expect for this application? If either service fails, the whole application fails. The probability of each service failing is independent, so the composite SLA for this application is 99.95% × 99.99% = 99.94%. That's lower than the individual SLAs, which isn't surprising because an application that relies on multiple services has more potential failure points.
 
+#### Describe public and private preview features
+Public preview – azure feature is available to all customers for evaluation purposes 
+Allows for testing pre-release features, products, services, software, and even regions 
+All previews are excluded from Microsoft SLAs and Warranties 
+Previews might not include customer support from Microsoft 
+Preview might not be brought forward into General Release status 
 
+Private Preview - during this phase we invite a few customers to take part in early access to new concepts and features. This phase does not include formal support.
+Private Preview: provided only to small subset of customers, in direct contact with the Azure Engineering teams, focused on direct and constant feedback during the development phase of a service
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#### Describe the term General Availability
+General Availability (GA) - once a feature is evaluated and tested successfully, it may be released to customers as part of Azure's default product, service, or feature set 
+After the public preview is completed, the feature is open for any licensed customer to use and is supported via all Microsoft support channels
 
