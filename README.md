@@ -1103,18 +1103,503 @@ You can access Advisor recommendations as Owner, Contributor, or Reader of a sub
 Advisor provides recommendations for Application Gateway, App Services, availability sets, Azure Cache, Azure Data Factory, Azure Database for MySQL, Azure Database for PostgreSQL, Azure Database for MariaDB, Azure ExpressRoute, Azure Cosmos DB, Azure public IP addresses, SQL Data Warehouse, SQL servers, storage accounts, Traffic Manager profiles, and virtual machines. 
 - Azure Advisor also includes your recommendations from Azure Security Center which may include recommendations for additional resource types.
 
+#### Describe Network Security Groups (NSG)
+Network Security Group 
+- You can filter network traffic to and from Azure resources in an Azure virtual network with a network security group.  
+- A network security group contains security rules that allow or deny inbound network traffic to, or outbound network traffic from, several types of Azure resources. 
+- For each rule, you can specify source and destination, port, and protocol 
+- Is a basic, stateful packet filtering firewall 
 
+Network security group security rules are evaluated by priority using the 5-tuple information (source, source port, destination, destination port, and protocol) to allow or deny the traffic 
 
+You cannot remove the default rules, but you can override them by creating rules with higher priorities. 
 
+A service tag represents a group of IP address prefixes from a given Azure service. It helps to minimize complexity of frequent updates on network security rules. 
 
+How Traffic is Evaluated 
+- You can deploy resources from several Azure services into an Azure virtual network 
+- You can associate zero, or one, network security group to each virtual network subnet and network interface in a virtual machine. The same network security group can be associated to as many subnets and network interfaces as you choose. 
 
+![nsg](https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fdocs.microsoft.com%2Fen-us%2Fazure%2Fvirtual-network%2Fmedia%2Fsecurity-groups%2Fnsg-interaction.png&f=1&nofb=1)
 
+**Inbound traffic**
+- For inbound traffic, Azure processes the rules in a network security group associated to a subnet first, if there is one, and then the rules in a network security group associated to the network interface, if there is one. 
+- VM1: The security rules in NSG1 are processed, since it is associated to Subnet1 and VM1 is in Subnet1. Unless you've created a rule that allows port 80 inbound, the traffic is denied by the DenyAllInbound default security rule, and never evaluated by NSG2, since NSG2 is associated to the network interface. If NSG1 has a security rule that allows port 80, the traffic is then processed by NSG2. To allow port 80 to the virtual machine, both NSG1 and NSG2 must have a rule that allows port 80 from the internet. 
+- VM2: The rules in NSG1 are processed because VM2 is also in Subnet1. Since VM2 does not have a network security group associated to its network interface, it receives all traffic allowed through NSG1 or is denied all traffic denied by NSG1. Traffic is either allowed or denied to all resources in the same subnet when a network security group is associated to a subnet. 
+- VM3: Since there is no network security group associated to Subnet2, traffic is allowed into the subnet and processed by NSG2, because NSG2 is associated to the network interface attached to VM3. 
+- VM4: Traffic is allowed to VM4, because a network security group isn't associated to Subnet3, or the network interface in the virtual machine. All network traffic is allowed through a subnet and network interface if they don't have a network security group associated to them. 
 
+**Outbound traffic**
+- For outbound traffic, Azure processes the rules in a network security group associated to a network interface first, if there is one, and then the rules in a network security group associated to the subnet, if there is one. 
+- VM1: The security rules in NSG2 are processed. Unless you create a security rule that denies port 80 outbound to the internet, the traffic is allowed by the AllowInternetOutbound default security rule in both NSG1 and NSG2. If NSG2 has a security rule that denies port 80, the traffic is denied, and never evaluated by NSG1. To deny port 80 from the virtual machine, either, or both of the network security groups must have a rule that denies port 80 to the internet. 
+- VM2: All traffic is sent through the network interface to the subnet, since the network interface attached to VM2 does not have a network security group associated to it. The rules in NSG1 are processed. 
+- VM3: If NSG2 has a security rule that denies port 80, the traffic is denied. If NSG2 has a security rule that allows port 80, then port 80 is allowed outbound to the internet, since a network security group is not associated to Subnet2. 
+- VM4: All network traffic is allowed from VM4, because a network security group isn't associated to the network interface attached to the virtual machine, or to Subnet3. 
 
+#### Describe Application Security Groups (ASG)
+Application security groups enable you to configure network security as a natural extension of an application's structure, allowing you to group virtual machines and define network security policies based on those groups
 
+![asg](https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fdocs.microsoft.com%2Fen-us%2Fazure%2Fvirtual-network%2Fmedia%2Fsecurity-groups%2Fapplication-security-groups.png&f=1&nofb=1)
 
+In the previous picture, NIC1 and NIC2 are members of the AsgWeb application security group. NIC3 is a member of the AsgLogic application security group. NIC4 is a member of the AsgDb application security group. Though each network interface in this example is a member of only one application security group, a network interface can be a member of multiple application security groups, up to the Azure limits. None of the network interfaces have an associated network security group.
 
+All network interfaces assigned to an application security group have to exist in the same virtual network that the first network interface assigned to the application security group is in. For example, if the first network interface assigned to an application security group named AsgWeb is in the virtual network named VNet1, then all subsequent network interfaces assigned to ASGWeb must exist in VNet1. You cannot add network interfaces from different virtual networks to the same application security group.
 
+#### Describe Azure Firewall
+Azure Firewall - is a managed, cloud-based network security service that protects your Azure Virtual Network resources. 
+- It's a fully stateful firewall 
+
+![firewall](https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fdocs.microsoft.com%2Fen-us%2Fazure%2Ffirewall%2Fmedia%2Foverview%2Ffirewall-overview.png&f=1&nofb=1)
+
+Azure Firewall uses a static public IP address for your virtual network resources allowing outside firewalls to identify traffic originating from your virtual network. The service is fully integrated with Azure Monitor for logging and analytics. 
+
+- Azure Firewall can be configured during deployment to span multiple Availability Zones 
+- Azure Firewall can scale up as much as you need to accommodate changing network traffic flows 
+- You can limit outbound HTTP/S traffic or Azure SQL traffic (preview) to a specified list of fully qualified domain names (FQDN) including wild cards. This feature doesn't require SSL termination. 
+- You can centrally create allow or deny network filtering rules by source and destination IP address, port, and protocol. 
+- Threat intelligence-based filtering can be enabled for your firewall to alert and deny traffic from/to known malicious IP addresses and domains. The IP addresses and domains are sourced from the Microsoft Threat Intelligence feed. 
+- All outbound virtual network traffic IP addresses are translated to the Azure Firewall public IP (Source Network Address Translation). 
+- Inbound Internet network traffic to your firewall public IP address is translated (Destination Network Address Translation) and filtered to the private IP addresses on your virtual networks. 
+
+Azure Firewall is Payment Card Industry (PCI), Service Organization Controls (SOC), International Organization for Standardization (ISO), and ICSA Labs compliant 
+
+Azure Firewall service tags can be used in the network rules destination field. You can use them in place of specific IP addresses. 
+
+Up to 100 public IP addresses can be associated with Azure Firewall 
+
+#### Describe Azure DDoS Protection
+A DDoS attack attempts to exhaust an application's resources, making the application unavailable to legitimate users. DDoS attacks can be targeted at any endpoint that is publicly reachable through the internet. 
+
+Azure DDoS protection provides the following service tiers: 
+1. Basic: Automatically enabled as part of the Azure platform. Always-on traffic monitoring, and real-time mitigation of common network-level attacks, provide the same defenses utilized by Microsoft's online services. The entire scale of Azure's global network can be used to distribute and mitigate attack traffic across regions. Protection is provided for IPv4 and IPv6 Azure public IP addresses. 
+2. Standard: Provides additional mitigation capabilities over the Basic service tier that are tuned specifically to Azure Virtual Network resources. DDoS Protection Standard is simple to enable, and requires no application changes. Protection policies are tuned through dedicated traffic monitoring and machine learning algorithms. Policies are applied to public IP addresses associated to resources deployed in virtual networks, such as Azure Load Balancer, Azure Application Gateway, and Azure Service Fabric instances, but this protection does not apply to App Service Environments. Real-time telemetry is available through Azure Monitor views during an attack, and for history. Rich attack mitigation analytics are available via diagnostic settings. Application layer protection can be added through the Azure Application Gateway Web Application Firewall or by installing a 3rd party firewall from Azure Marketplace. Protection is provided for IPv4 and IPv6 Azure public IP addresses. 
+
+DDoS Protection Standard can mitigate the following types of attacks: 
+- Volumetric attacks: The attack's goal is to flood the network layer with a substantial amount of seemingly legitimate traffic. It includes UDP floods, amplification floods, and other spoofed-packet floods. DDoS Protection Standard mitigates these potential multi-gigabyte attacks by absorbing and scrubbing them, with Azure's global network scale, automatically. 
+- Protocol attacks: These attacks render a target inaccessible, by exploiting a weakness in the layer 3 and layer 4 protocol stack. It includes, SYN flood attacks, reflection attacks, and other protocol attacks. DDoS Protection Standard mitigates these attacks, differentiating between malicious and legitimate traffic, by interacting with the client, and blocking malicious traffic. 
+- Resource (application) layer attacks: These attacks target web application packets, to disrupt the transmission of data between hosts. The attacks include HTTP protocol violations, SQL injection, cross-site scripting, and other layer 7 attacks. Use a Web Application Firewall, such as the Azure Application Gateway web application firewall, as well as DDoS Protection Standard to provide defense against these attacks. There are also third-party web application firewall offerings available in the Azure Marketplace. 
+
+Microsoft has partnered with BreakingPoint Cloud to build an interface where you can generate traffic against DDoS Protection-enabled public IP addresses for simulations 
+
+#### Describe the difference between authentication and authorization
+Authentication (AuthN) - is the process of obtaining identification credentials such as name and password from a user and validating those credentials against some authority 
+Essentially the process of establishing the identity of a person or service looking to access a resource 
+Involves the act of challenging a party for legitimate credentials and provides the basis for creating a security principal for identity and access control 
+Authentication establishes if they are who they say they are 
+
+Authorization (AuthZ) - determines whether an identity should be granted access to a specific resource 
+Is the process of establishing what level of access an authenticated person or service has 
+It specifies what data they're allowed to access and what they can do with it 
+
+#### Describe Azure Active Directory
+Azure Active Directory (Azure AD) is Microsoft’s cloud-based identity and access management service, which helps your employees sign in and access resources in: 
+- External resources, such as Microsoft Office 365, the Azure portal, and thousands of other SaaS applications. 
+- Internal resources, such as apps on your corporate network and intranet, along with any cloud apps developed by your own organization. 
+
+Azure Active Directory (Azure AD) enables you to securely manage access to Azure services and resources for your users. Included with Azure AD is a full suite of identity management capabilities. 
+
+Azure AD is intended for: 
+- IT admins 
+- App developers 
+- Microsoft 365, Office 365, Azure, or Dynamics CRM Online subscribers 
+
+Purchase Options 
+- Azure Active Directory Free. Provides user and group management, on-premises directory synchronization, basic reports, self-service password change for cloud users, and single sign-on across Azure, Office 365, and many popular SaaS apps. 
+- Azure Active Directory Premium P1. In addition to the Free features, P1 also lets your hybrid users access both on-premises and cloud resources. It also supports advanced administration, such as dynamic groups, self-service group management, Microsoft Identity Manager (an on-premises identity and access management suite) and cloud write-back capabilities, which allow self-service password reset for your on-premises users. 
+- Azure Active Directory Premium P2. In addition to the Free and P1 features, P2 also offers Azure Active Directory Identity Protection to help provide risk-based Conditional Access to your apps and critical company data and Privileged Identity Management to help discover, restrict, and monitor administrators and their access to resources and to provide just-in-time access when needed. 
+- "Pay as you go" feature licenses. You can also get additional feature licenses, such as Azure Active Directory Business-to-Customer (B2C). B2C can help you provide identity and access management solutions for your customer-facing apps. For more information, see Azure Active Directory B2C documentation. 
+
+#### Describe Azure Multi-factor Authentication (MFA)
+Multi-factor Authentication (MFA) – is a process where a user is prompted during the sign-in process for an additional form of identification, such as to enter a code on their mobile device or to provide a fingerprint scan 
+- Provides additional security for your identities by requiring 2 or more elements for full authentication 
+- Something you know (password or security question) 
+- Something you possess (mobile app, token-generating device) 
+- Something you are (fingerprint, face scan); biometrics 
+
+The verification prompts are part of the Azure AD sign-in event, which automatically requests and processes the MFA challenge when required. 
+
+The following additional forms of verification can be used with Azure Multi-Factor Authentication: 
+- Microsoft Authenticator app 
+- OATH Hardware token 
+- SMS 
+- Voice call 
+
+MFA comes as part of the following Azure services: 
+- Azure Active Directory Premium Licenses 
+- MFA for Office 365 
+- Azure Active Directory Global Administrators 
+
+To use Azure Multi-Factor Authentication, register for or purchase an eligible Azure AD tier. Azure AD comes in four editions — Free, Office 365 apps edition (for Office 365 Business Premium E3, or E5 customers), Premium P1, and Premium P2. 
+
+#### Describe Azure Security Center
+Azure Security Center – is a unified infrastructure security management system that strengthens the security posture of your datacenters 
+- Provides advanced threat protection across workloads in the cloud – whether they're in Azure or not – as well as on-premise workloads (via Log Analytics agent) 
+- Is basically a monitoring service that provides threat protection across all services both in Azure and on-prem 
+- Limits exposure to brute force attacks 
+- Provides you the tools needed to harden your network and secure your services 
+- Is a PaaS monitoring solution 
+
+Ensure you’re following best practices and fix common misconfigurations for Azure infrastructure as a service (IaaS) and platform as a service (PaaS) resources that may include: 
+- Failure to deploy system updates on virtual machines (VMs). 
+- Unnecessary exposure to the Internet through public-facing endpoints. 
+- Unencrypted data in transit or storage. 
+
+When you activate Security Center, a monitoring agent is deployed automatically into Azure virtual machines. For on-premises VMs, you manually deploy the agent. Security Center begins assessing the security state of all your VMs, networks, applications, and data. 
+
+Our analytics engines analyze the data and machine learning synthesizes it. Security Center provides recommendations and threat alerts for protecting your workloads. You’ll know right away if there’s been an attack or anomalous activity. 
+
+Aggregate your security information in an Azure Monitor workspace for big data querying capabilities. Alternatively, you can query your data through REST APIs, PowerShell cmdlets, or integration with an existing SIEM, such as Azure Sentinel. 
+
+Azure Security Center addresses the 3 most urgent security challenges: 
+- Rapidly changing workloads – It’s both a strength and a challenge of the cloud. On the one hand, end users are empowered to do more. On the other, how do you make sure that the ever-changing services people are using and creating are up to your security standards and follow security best practices? 
+- Increasingly sophisticated attacks - Wherever you run your workloads, the attacks keep getting more sophisticated. You have to secure your public cloud workloads, which are, in effect, an Internet facing workload that can leave you even more vulnerable if you don't follow security best practices. 
+- Security skills are in short supply - The number of security alerts and alerting systems far outnumbers the number of administrators with the necessary background and experience to make sure your environments are protected. Staying up-to-date with the latest attacks is a constant challenge, making it impossible to stay in place while the world of security is an ever-changing front. 
+
+Security Center is natively part of Azure, PaaS services in Azure - including Service Fabric, SQL databases, and storage accounts - are monitored and protected by Security Center without necessitating any deployment. 
+
+Security Center helps you identify Shadow IT subscriptions 
+
+Use Cases 
+- Use Security Center for an incident response solution 
+- Use Security Center recommendations to enhance your own security 
+- Security hardening 
+- Track and manage compliance 
+
+Security Center continuously discovers new resources that are being deployed across your workloads and assesses whether they are configured according to security best practices 
+- One of the most powerful tools Security Center provides for continuously monitoring the security status of your network is the Network map. The map enables you to see the topology of your workloads, so you can see if each node is properly configured. 
+
+Security Center makes mitigating your security alerts one step easier, by adding a Secure Score. The Secure Scores are now associated with each recommendation you receive to help you understand how important each recommendation is to your overall security posture. This is crucial in enabling you to prioritize your security work. 
+- Score is a % value 
+- Want a high score; high score = low risk 
+- Also includes security controls - Each control is a logical group of related security recommendations, and reflects your vulnerable attack surfaces. A control is a set of security recommendations, with instructions that help you implement those recommendations. Your score only improves when you remediate all of the recommendations for a single resource within a control. 
+
+The heart of Azure Security Center's value lies in its recommendations. The recommendations are tailored to the particular security concerns found on your workloads, and Security Center does the security admin work for you, by not only finding your vulnerabilities, but providing you with specific instructions for how to get rid of them.
+
+Azure Security Center supports virtual machines and servers on different types of hybrid environments: 
+- Only Azure 
+- Azure and on-premises 
+- Azure and other clouds 
+- Azure, other clouds, and on-premises 
+
+Security Center depends on the Log Analytics Agent. Ensure your machines are running one of the supported operating systems for this agent 
+
+#### Describe Azure Key Vault
+Key Vault – is a tool for securing, storing, and accessing secrets; A secret is anything that you want to tightly control access to, such as API keys, passwords, tokens, or certificates. A vault is a logical group of secrets. 
+
+Benefits 
+- Centralized application secrets 
+- Securely store secrets and keys 
+- Monitor access and use 
+- Simplify administration 
+- Azure integration with other services – storage accounts, container registries, event hub 
+
+Azure Key Vault helps solve the following problems: 
+- Secrets Management - Azure Key Vault can be used to Securely store and tightly control access to tokens, passwords, certificates, API keys, and other secrets 
+- Key Management - Azure Key Vault can also be used as a Key Management solution. Azure Key Vault makes it easy to create and control the encryption keys used to encrypt your data. 
+- Certificate Management - Azure Key Vault is also a service that lets you easily provision, manage, and deploy public and private Transport Layer Security/Secure Sockets Layer (TLS/SSL) certificates for use with Azure and your internal connected resources. 
+- Store secrets backed by Hardware Security Modules - The secrets and keys can be protected either by software or FIPS 140-2 Level 2 validated HSMs 
+
+As a secure store in Azure, Key Vault has been used to simplify scenarios like: 
+- Azure Disk Encryption 
+- The always encrypted functionality in SQL server and Azure SQL Database 
+- Azure App Service
+
+There are three ways to authenticate to Key Vault: 
+1. Managed identities for Azure resources: When you deploy an app on a virtual machine in Azure, you can assign an identity to your virtual machine that has access to Key Vault. You can also assign identities to other Azure resources. The benefit of this approach is that the app or service isn't managing the rotation of the first secret. Azure automatically rotates the identity. We recommend this approach as a best practice. 
+2. Service principal and certificate: You can use a service principal and an associated certificate that has access to Key Vault. We don't recommend this approach because the application owner or developer must rotate the certificate. 
+3. Service principal and secret: Although you can use a service principal and a secret to authenticate to Key Vault, we don't recommend it. It's hard to automatically rotate the bootstrap secret that's used to authenticate to Key Vault. 
+
+#### Describe Azure Information Protection (AIP)
+- Control and help secure email, documents, and sensitive data that you share outside your company
+- Is a cloud-based solution that helps an organization to classify and optionally, protect its documents and emails by applying labels. 
+- Labels can be applied automatically by administrators who define rules and conditions, manually by users, or a combination where users are given recommendations.
+
+The following picture shows an example of Azure Information Protection in action on a user's computer. The administrator has configured a label with rules that detect sensitive data and in our example, this is credit card information. When a user saves a Word document that contains a credit card number, she sees a custom tooltip that recommends the label that the administrator has configured. This label classifies the document and protects it.
+
+![aip](https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fdocs.microsoft.com%2Fen-us%2Fazure%2Finformation-protection%2Fmedia%2Finfo-protect-recommend-calloutsv2.png&f=1&nofb=1)
+
+You use Azure Information Protection labels to apply classification to documents and emails. When you do this, the classification is identifiable regardless of where the data is stored or with whom it’s shared. The labels can include visual markings such as a header, footer, or watermark. Metadata is added to files and email headers in clear text.
+
+- For classification, labeling, and protection by using the Azure Information Protection client (classic or unified labeling) or scanner: You must have an Azure Information Protection plan.
+- For protection-only: You must have an Office 365 plan that includes Azure Information Protection.
+
+Microsoft Azure Information Protection can be purchased either standalone or through one of the following Microsoft licensing suites:
+- Microsoft 365 Enterprise plans
+- Microsoft 365 Compliance plan (includes Azure Information Protection P2) Microsoft 365 Business (includes Azure Information Protection P1)
+- Enterprise Mobility + Security plans
+
+Azure Information Protection is offered as a user subscription license. It's available for direct purchase online or through your Microsoft representative or partner.
+
+#### Describe Azure Advanced Threat Protection (ATP)
+- Allows you to detect and investigate advanced attacks on-premises and in the cloud
+- Is a cloud-based security solution that leverages your on-premises Active Directory signals to identify, detect, and investigate advanced threats, compromised identities, and malicious insider actions directed at your organization
+- Azure ATP monitors your domain controllers by capturing and parsing network traffic and leveraging Windows events directly from your domain controllers, then analyzes the data for attacks and threats
+
+Azure ATP enables SecOp analysts and security professionals struggling to detect advanced attacks in hybrid environments to:
+- Monitor users, entity behavior, and activities with learning-based analytics
+- Protect user identities and credentials stored in Active Directory
+- Identify and investigate suspicious user activities and advanced attacks throughout the kill chain
+- Provide clear incident information on a simple timeline for fast triage
+
+Azure ATP monitors and analyzes user activities and information across your network, such as permissions and group membership, creating a behavioral baseline for each user. 
+- Azure ATP then identifies anomalies with adaptive built-in intelligence — proprietary sensors monitor organizational domain controllers, providing a comprehensive view for all user activities from every device
+- Requires a license for Enterprise Mobility + Security 5 (EMS E5) directly via the Microsoft 365 portal or use the Cloud Solution Partner (CSP) licensing model. Standalone Azure ATP licenses are also available.
+
+#### Describe policies and initiatives with Azure Policy
+Azure Policy is a service in Azure that you use to create, assign, and manage policies. These policies enforce different rules and effects over your resources, so those resources stay compliant with your corporate standards and service level agreements. Azure Policy meets this need by evaluating your resources for non-compliance with assigned policies. All data stored by Azure Policy is encrypted at rest. 
+- Runs evaluations of your resources and scans for those not compliant with the policies you have created 
+- Comes with many built-in policy and initiative definitions you can use – storage, networking, compute, security center, and monitoring 
+- Can integrate with Azure DevOps by applying CI/CD pipeline policies for pre/post-deployment of apps 
+- Can automatically remediate resources/configurations that are deemed non-compliant 
+
+There are a few key differences between Azure Policy and role-based access control (RBAC). RBAC focuses on user actions at different scopes. You might be added to the contributor role for a resource group, allowing you to make changes to that resource group.  
+
+Azure Policy focuses on resource properties during deployment and for already existing resources. Azure Policy controls properties such as the types or locations of resources. Unlike RBAC, Azure Policy is a default allow and explicit deny system. 
+
+Azure Policy has several permissions, known as operations, in two Resource Providers: 
+- Microsoft.Authorization 
+- Microsoft.PolicyInsights 
+
+The journey of creating and implementing a policy in Azure Policy begins with creating a policy definition. Every policy definition has conditions under which it's enforced. And, it has a defined effect that takes place if the conditions are met. 
+- A definition expresses what to evaluate and what action to take 
+- Create a policy definition --> assign that definition to a scope of resources (e.g. VM's) --> view policy evaluation results 
+
+In Azure Policy, we offer several built-in policies that are available by default. For example: 
+  - Allowed Storage Account SKUs: Determines if a storage account being deployed is within a set of SKU sizes. Its effect is to deny all storage accounts that don't adhere to the set of defined SKU sizes. 
+  - Allowed Resource Type: Defines the resource types that you can deploy. Its effect is to deny all resources that aren't part of this defined list. 
+  - Allowed Locations: Restricts the available locations for new resources. Its effect is used to enforce your geo-compliance requirements. 
+  - Allowed Virtual Machine SKUs: Specifies a set of virtual machine SKUs that you can deploy. 
+  - Add a tag to resources: Applies a required tag and its default value if it's not specified by the deploy request. 
+  - Enforce tag and its value: Enforces a required tag and its value to a resource. 
+  - Not allowed resource types: Prevents a list of resource types from being deployed. 
+  
+To implement these policy definitions (both built-in and custom definitions), you'll need to assign them. You can assign any of these policies through the Azure portal, PowerShell, or Azure CLI. 
+
+An initiative definition is a collection of policy definitions that are tailored towards achieving a singular overarching goal. Initiative definitions simplify managing and assigning policy definitions. They simplify by grouping a set of policies as one single item. For example, you could create an initiative titled Enable Monitoring in Azure Security Center, with a goal to monitor all the available security recommendations in your Azure Security Center.
+
+#### Describe Role-based Access Control (RBAC)
+Role-based access control (RBAC) helps you manage who has access to Azure resources, what they can do with those resources, and what areas they have access to. 
+- RBAC is an authorization system built on Azure Resource Manager that provides fine-grained access management of Azure resources. 
+- Using RBAC, you can segregate duties within your team and grant only the amount of access to users that they need to perform their jobs. Instead of giving everybody unrestricted permissions in your Azure subscription or resources, you can allow only certain actions at a particular scope. 
+- best practice to grant users the least privilege to get their work done 
+
+The way you control access to resources using RBAC is to create role assignments. This is a key concept to understand – it's how permissions are enforced. 
+
+A role assignment consists of 3 elements: security principal, role definition, and scope. 
+
+![rbac](https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fdocs.microsoft.com%2Fen-us%2Fazure%2Frole-based-access-control%2Fmedia%2Foverview%2Frbac-least-privilege.png&f=1&nofb=1)
+
+1. A security principal is an object that represents a user, group, service principal, or managed identity that is requesting access to Azure resources. 
+  - User - An individual who has a profile in Azure Active Directory. You can also assign roles to users in other tenants. For information about users in other organizations, see Azure Active Directory B2B. 
+  - Group - A set of users created in Azure Active Directory. When you assign a role to a group, all users within that group have that role. 
+  - Service principal - A security identity used by applications or services to access specific Azure resources. You can think of it as a user identity (username and password or certificate) for an application. 
+  - Managed identity - An identity in Azure Active Directory that is automatically managed by Azure. You typically use managed identities when developing cloud applications to manage the credentials for authenticating to Azure services. 
+  
+2. A role definition is a collection of permissions. It's typically just called a role. A role definition lists the operations that can be performed, such as read, write, and delete. Roles can be high-level, like owner, or specific, like virtual machine reader. 
+  - Azure includes several built-in roles that you can use. The following lists four fundamental built-in roles. The first three apply to all resource types. 
+  - Owner - Has full access to all resources including the right to delegate access to others. 
+  - Contributor - Can create and manage all types of Azure resources but can't grant access to others. 
+  - Reader - Can view existing Azure resources. 
+  - User Access Administrator - Lets you manage user access to Azure resources. 
+  
+3. Scope is the set of resources that the access applies to. When you assign a role, you can further limit the actions allowed by defining a scope. This is helpful if you want to make someone a Website Contributor, but only for one resource group. 
+  - In Azure, you can specify a scope at multiple levels: management group, subscription, resource group, or resource. Scopes are structured in a parent-child relationship. 
+  
+When you grant access at a parent scope, those permissions are inherited to the child scopes. For example: 
+- If you assign the Owner role to a user at the management group scope, that user can manage everything in all subscriptions in the management group. 
+- If you assign the Reader role to a group at the subscription scope, the members of that group can view every resource group and resource in the subscription. 
+- If you assign the Contributor role to an application at the resource group scope, it can manage resources of all types in that resource group, but not other resource groups in the subscription. 
+
+A role assignment is the process of attaching a role definition to a user, group, service principal, or managed identity at a particular scope for the purpose of granting access. Access is granted by creating a role assignment, and access is revoked by removing a role assignment. 
+
+![rbactwo](https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fdocs.microsoft.com%2Fen-us%2Fazure%2Frole-based-access-control%2Fmedia%2Foverview%2Frbac-overview.png&f=1&nofb=1)
+
+#### Describe Locks
+As an administrator, you may need to lock a subscription, resource group, or resource to prevent other users in your organization from accidentally deleting or modifying critical resources. You can set the lock level to CanNotDelete or ReadOnly. 
+
+- In the portal, the locks are called Delete and Read-only respectively. 
+- CanNotDelete means authorized users can still read and modify a resource, but they can't delete the resource. 
+- ReadOnly means authorized users can read a resource, but they can't delete or update the resource. Applying this lock is similar to restricting all authorized users to the permissions granted by the Reader role. 
+
+When you apply a lock at a parent scope, all resources within that scope inherit the same lock. Even resources you add later inherit the lock from the parent. The most restrictive lock in the inheritance takes precedence. 
+- Unlike role-based access control, you use management locks to apply a restriction across all users and roles 
+- For example, a ReadOnly lock on a SQL Database prevents you from deleting or modifying the database. It doesn't prevent you from creating, updating, or deleting data in the database 
+- Resource Manager locks apply only to operations that happen in the management plane, which consists of operations sent to https://management.azure.com. The locks don't restrict how resources perform their own functions. Resource changes are restricted, but resource operations aren't restricted. For example, a ReadOnly lock on a SQL Database prevents you from deleting or modifying the database. It doesn't prevent you from creating, updating, or deleting data in the database. 
+
+To create or delete management locks, you must have access to Microsoft.Authorization/* or Microsoft.Authorization/locks/* actions. Of the built-in roles, only Owner and User Access Administrator are granted those actions.
+
+#### Describe Azure Advisor security assistance
+Azure Advisor - is a personalized cloud consultant that helps you follow best practices to optimize your Azure deployments 
+analyzes your resource configuration and usage telemetry and then recommends solutions that can help you improve the cost effectiveness, performance, high availability, and security of your Azure resources. 
+- proactive, actionable, and personalized best practices recommendations. 
+- The Advisor dashboard displays personalized recommendations for all your subscriptions 
+
+The recommendations are divided into 5 categories: 
+1. High Availability: To ensure and improve the continuity of your business-critical applications. For more information, see Advisor High Availability recommendations. 
+VM Fault tolerance, availability sets, use managed disks, application gateway fault tolerance 
+2. Security: To detect threats and vulnerabilities that might lead to security breaches. For more information, see Advisor Security recommendations. 
+3. Performance: To improve the speed of your applications. For more information, see Advisor Performance recommendations. 
+Reduce TTL settings, VM premium storage 
+4. Cost: To optimize and reduce your overall Azure spending. For more information, see Advisor Cost recommendations. 
+Shut down underutilized instances, eliminate unprovisioned ExpressRoute circuits, reconfigure idle VNet Gateways, purchase reserved instances 
+5. Operational Excellence: To help you achieve process and workflow efficiency, resource manageability and deployment best practices. . For more information, see Advisor Operational Excellence recommendations. 
+
+You can access Advisor recommendations as Owner, Contributor, or Reader of a subscription. 
+
+Advisor provides recommendations for Application Gateway, App Services, availability sets, Azure Cache, Azure Data Factory, Azure Database for MySQL, Azure Database for PostgreSQL, Azure Database for MariaDB, Azure ExpressRoute, Azure Cosmos DB, Azure public IP addresses, SQL Data Warehouse, SQL servers, storage accounts, Traffic Manager profiles, and virtual machines. 
+  - Azure Advisor also includes your recommendations from Azure Security Center which may include recommendations for additional resource types. 
+
+#### Describe Azure Blueprints
+Azure Blueprints enables cloud architects and central IT groups to define a repeatable set of Azure resources that implements and adheres to an organization's standards, patterns, and requirements. 
+- makes it possible for development teams to rapidly build and stand up new environments with trust they're building within organizational compliance with a set of built-in components -- such as networking -- to speed up development and delivery. 
+
+Blueprints are a declarative way to orchestrate the deployment of various resource templates and other artifacts such as: 
+- Role Assignments 
+- Policy Assignments 
+- Azure Resource Manager templates 
+- Resource Groups 
+
+Azure Blueprints service is backed by the globally distributed Azure Cosmos DB 
+
+How it's different from Resource Manager templates 
+  - The service is designed to help with environment setup. This setup often consists of a set of resource groups, policies, role assignments, and Resource Manager template deployments. A blueprint is a package to bring each of these artifact types together and allow you to compose and version that package -- including through a CI/CD pipeline. Ultimately, each is assigned to a subscription in a single operation that can be audited and tracked. 
+  - Nearly everything that you want to include for deployment in Azure Blueprints can be accomplished with a Resource Manager template. However, a Resource Manager template is a document that doesn't exist natively in Azure – each is stored either locally or in source control 
+  - Azure Blueprints, the relationship between the blueprint definition (what should be deployed) and the blueprint assignment (what was deployed) is preserved. This connection supports improved tracking and auditing of deployments. Azure Blueprints can also upgrade several subscriptions at once that are governed by the same blueprint. 
+  
+A blueprint is made up of artifacts. 
+
+#### Describe Azure Monitor
+Azure Monitor - delivering a comprehensive solution for collecting, analyzing, and acting on telemetry from your cloud and on-premises environments 
+- Detect and diagnose issues across applications and dependencies with Application Insights. 
+- Correlate infrastructure issues with Azure Monitor for VMs and Azure Monitor for Containers. 
+- Drill into your monitoring data with Log Analytics for troubleshooting and deep diagnostics. 
+- Support operations at scale with smart alerts and automated actions. 
+- Create visualizations with Azure dashboards and workbooks. 
+- PAY GO model 
+
+![azuremon](https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Fdocs.microsoft.com%2Fen-us%2Fazure%2Fazure-monitor%2Fmedia%2Foverview%2Foverview.png&f=1&nofb=1)
+
+All data collected by Azure Monitor fits into one of two fundamental types, metrics and logs. Metrics are numerical values that describe some aspect of a system at a particular point in time. They are lightweight and capable of supporting near real-time scenarios. Logs contain different kinds of data organized into records with different sets of properties for each type. Telemetry such as events and traces are stored as logs in addition to performance data so that it can all be combined for analysis. 
+
+Azure Monitor can collect data from a variety of sources: 
+- Application monitoring data: Data about the performance and functionality of the code you have written, regardless of its platform. 
+- Guest OS monitoring data: Data about the operating system on which your application is running. This could be running in Azure, another cloud, or on-premises. 
+- Azure resource monitoring data: Data about the operation of an Azure resource. 
+- Azure subscription monitoring data: Data about the operation and management of an Azure subscription, as well as data about the health and operation of Azure itself. 
+- Azure tenant monitoring data: Data about the operation of tenant-level Azure services, such as Azure Active Directory. (A tenant is a representation of an organization)
+
+Insights 
+- Application Insights - monitors the availability, performance, and usage of your web applications whether they're hosted in the cloud or on-premises 
+- Azure Monitor for Containers - a feature designed to monitor the performance of container workloads deployed to managed Kubernetes clusters hosted on Azure Kubernetes Service (AKS). It gives you performance visibility by collecting memory and processor metrics from controllers, nodes, and containers that are available in Kubernetes through the Metrics API. Container logs are also collected 
+- Azure Monitor for VMs - monitors your Azure virtual machines (VM) at scale by analyzing the performance and health of your Windows and Linux VMs; monitors VM's from another cloud provider as well 
+- Monitoring Solutions - are packaged sets of logic that provide insights for a particular application or service. They include logic for collecting monitoring data for the application or service, queries to analyze that data, and views for visualization. 
+
+Alerts in Azure Monitor proactively notify you of critical conditions and potentially attempt to take corrective action. Alert rules based on metrics provide near real time alerting based on numeric values, while rules based on logs allow for complex logic across data from multiple sources. 
+
+Autoscale allows you to have the right amount of resources running to handle the load on your application. It allows you to create rules that use metrics collected by Azure Monitor to determine when to automatically add resources to handle increases in load and also save money by removing resources that are sitting idle. You specify a minimum and maximum number of instances and the logic for when to increase or decrease resources. 
+
+Integrate and Export Data 
+- Event Hub 
+- Logic Apps 
+- API 
+
+#### Describe Azure Service Health
+Azure Service Health 
+- Includes current and upcoming issues such as service impacting events, planned maintenance 
+- Can help you prepare for planned maintenance 
+
+Azure Service Health is a combination of 3 separate smaller services. 
+1. Azure status informs you of service outages in Azure on the Azure Status page. The page is a global view of the health of all Azure services across all Azure regions. The status page is a good reference for incidents with widespread impact, but we strongly recommend that current Azure users leverage Azure service health to stay informed about Azure incidents and maintenance. 
+- view all services that report their service health, as well as incidents with wide-ranging impact 
+- gets updated in real time as the health of Azure services change 
+
+2. Azure service health provides a personalized view of the health of the Azure services and regions you're using. This is the best place to look for service impacting communications about outages, planned maintenance activities, and other health advisories because the authenticated Azure Service Health experience knows which services and resources you currently use. The best way to use Service Health is to set up Service Health alerts to notify you via your preferred communication channels when service issues, planned maintenance, or other changes may affect the Azure services and regions you use. 
+- Service Health tracks four types of health events that may impact your resources: 
+1. Service issues - Problems in the Azure services that affect you right now. 
+2. Planned maintenance - Upcoming maintenance that can affect the availability of your services in the future. 
+3. Health advisories - Changes in Azure services that require your attention. Examples include when Azure features are deprecated or if you exceed a usage quota. 
+4. Security advisories (preview) - Security related notifications that may affect the availability of your Azure services. 
+
+3. Azure resource health provides information about the health of your individual cloud resources such as a specific virtual machine instance. Using Azure Monitor, you can also configure alerts to notify you of availability changes to your cloud resources. Azure Resource Health along with Azure Monitor notifications will help you stay better informed about the availability of your resources minute by minute and quickly assess whether an issue is due to a problem on your side or related to an Azure platform event. 
+- helps you diagnose and get support for service problems that affect your Azure resources. It reports on the current and past health of your resources. 
+
+#### Describe industry compliance terms such as GDPR, ISO, and NIST
+GDPR - General Data Protection Regulation (GDPR) introduces new rules for organizations that offer goods and services to people in the European Union (EU), or that collect and analyze data for EU residents no matter where you or your enterprise are located
+- GDPR gives rights to people to manage personal data collected by an organization
+- These rights can be exercised through a Data Subject Request (DSR). The organization is required to provide timely information regarding DSRs and data breaches, and perform Data Protection Impact Assessments (DPIAs)
+
+ISO - International Organization for Standardization (ISO) is an independent nongovernmental organization and the world’s largest developer of voluntary international standards. The International Electrotechnical Commission (IEC) is the world’s leading organization for the preparation and publication of international standards for electrical, electronic, and related technologies.
+- ISO/IEC 27001 is a security standard that formally specifies an Information Security Management System (ISMS) that is intended to bring information security under explicit management control. 
+- As a formal specification, it mandates requirements that define how to implement, monitor, maintain, and continually improve the ISMS
+both Azure Public and Azure Germany are audited once a year for ISO/IEC 27001 compliance by a third-party accredited certification body
+
+NIST - National Institute of Standards and Technology (NIST) promotes and maintains measurement standards and guidance to help organizations assess risk
+
+Criminal Justice Information Services (CJIS). Any US state or local agency that wants to access the FBI's CJIS database is required to adhere to the CJIS Security Policy. Azure is the only major cloud provider that contractually commits to conformance with the CJIS Security Policy, which commits Microsoft to adhering to the same requirements that law enforcement and public safety entities must meet.
+
+Cloud Security Alliance (CSA) STAR Certification. Azure, Intune, and Microsoft Power BI have obtained STAR Certification, which involves a rigorous independent third-party assessment of a cloud provider's security posture. This STAR certification is based on achieving ISO/IEC 27001 certification and meeting criteria specified in the Cloud Controls Matrix (CCM). This certification demonstrates that a cloud service provider:
+- Conforms to the applicable requirements of ISO/IEC 27001.
+- Has addressed issues critical to cloud security as outlined in the CCM.
+- Has been assessed against the STAR Capability Maturity Model for the management of activities in CCM control areas.
+
+#### Describe Microsoft Privacy Statement
+Microsoft Privacy Statement – purpose is to improve/develop products, personalize products and make recommendations, advertise/market to end users, and provide product support 
+- This statement explains what personal data Microsoft processes, how it processes it, and for what purposes 
+- Applies to the interactions Microsoft has with you and Microsoft products and services, website apps, software, servers, and devices 
+- Intended to provide openness and honesty about how Microsoft deals with personal data in its products and services 
+
+#### Describe Microsoft Trust Center
+The Microsoft Trust Center provides organizations with a dashboard to understand how they implement security, privacy, compliance, and transparency. It also provides a complete GDPR assessment. 
+- Is a website resource containing information and details about how Microsoft implements and supports security, privacy, compliance, and transparency in all Microsoft cloud products and services 
+- Provides in-depth information about security, privacy, compliance – allows you to view the compliance listings of offerings and solutions 
+- Info specific to key organizational roles – business managers, admins, security teams 
+- Cross-company document search 
+
+Place where you can find white papers, articles and videos about security and compliance for the Azure platform
+
+#### Describe Microsoft Service Trust Portal
+Service Trust Portal (STP) - hosts the Compliance Manager service and is the Microsoft public site for publishing audit reports and other compliance-related information 
+- You can download these reports 
+- Is a companion feature to the Trust Center website 
+- Get documents needed to perform risk assessments 
+
+Review the available independent audit reports for Microsoft's Cloud services, which provide information about compliance with data protection standards and regulatory requirements, such as International Organization for Standardization (ISO), Service Organization Controls (SOC), National Institute of Standards and Technology (NIST), Federal Risk and Authorization Management Program (FedRAMP), and the General Data Protection Regulation (GDPR) 
+
+#### Describe Compliance Manager
+Compliance Manager empowers your organization to manage your compliance activities from one place with three key capabilities:
+https://techcommunity.microsoft.com/t5/security-privacy-and-compliance/announcing-compliance-manager-general-availability/ba-p/161922  
+
+- a free workflow-based risk assessment tool in the Microsoft Service Trust Portal for managing regulatory compliance activities related to Microsoft cloud services
+- Part of your Microsoft 365, Office 365, or Azure Active Directory subscription
+
+- Helps you perform on-going risk assessments, now with Compliance Score
+- Compliance Manager is a cross-Microsoft Cloud services solution designed to help organizations meet complex compliance obligations, including the EU GDPR, ISO 27001, ISO 27018, NIST 800- 53, NIST 800- 171, and HIPAA
+- enables your organization to perform on-going risk assessments for what is identified as Microsoft’s responsibilities by evaluating detailed implementation and test details of our internal controls
+- We also provide you the information and tools to conduct self-assessment for your responsibilities of meeting regulatory requirements. Now with Compliance Score —a new feature for Compliance Manager—you can gain visibility into your organization’s compliance stature with a risk-based score reference.
+- Provides you with actionable insights, now from a certification/regulation view
+- Compliance Manager builds the connection between the data protection capabilities and the regulatory requirements, so now you know which technology solutions you can leverage to meet certain compliance obligations
+- Simplifies your journey to manage compliance activities, now with the capability to create multiple assessments for each standard and regulation
+- By using group functionality, you can now create multiple assessments for any standard or regulation that is available to you in Compliance Manager by time, by teams, or by business units. For example, you can create a GDPR assessment for the 2018 group and another one for the 2019 group
+
+#### Describe Azure Government cloud services
+Sovereign Clouds
+
+Azure Government
+US government agencies or their partners interested in cloud services that meet government security and compliance requirements, can be confident that Microsoft Azure Government provides world-class security, protection, and compliance services. Azure Government delivers a dedicated cloud enabling government agencies and their partners to transform mission-critical workloads to the cloud. Azure Government services handle data that is subject to certain government regulations and requirements, such as FedRAMP, NIST 800.171 (DIB), ITAR, IRS 1075, DoD L4, and CJIS. In order to provide you with the highest level of security and compliance, Azure Government uses physically isolated datacenters and networks (located in U.S. only). 
+
+Azure Government includes Geo-Synchronous data replication, auto scaling, network, storage, data management, identity management, among other services. However, there are some key differences that developers working on applications hosted in Azure Government must be aware of. For detailed information, see Guidance for developers. 
+As a developer, you must know how to connect to Azure Government and once you connect you will mostly have the same experience as global Azure. This document provides links to variations in each service. Service specific articles include two key types of information: 
+Variations: Variations due to features that are not deployed yet or properties (for example, URLs) that are unique to the government environment. 
+Considerations: Government-specific implementation detail to ensure that data stays within your compliance boundary. 
+
+Azure Germany
+Microsoft Azure Germany delivers a cloud platform built on the foundational principles of security, privacy, compliance, and transparency. Azure Germany is a physically isolated instance of Microsoft Azure. It uses world-class security and compliance services that are critical to German data privacy regulations for all systems and applications built on its architecture. Operated by a data trustee, Azure Germany supports multiple hybrid scenarios for building and deploying solutions on-premises or in the cloud. 
+
+Customer data in the two datacenters is managed under the control of a data trustee, T-Systems International. This trustee is an independent German company and a subsidiary of Deutsche Telekom. It provides additional controls for customers' data, because access is provided only with the permission of customers or the data trustee. 
+
+#### Describe Azure China cloud services
+21Vianet
+Microsoft Azure operated by 21Vianet (Azure China) is a physically separated instance of cloud services located in China. It's independently operated and transacted by Shanghai Blue Cloud Technology Co., Ltd. ("BlueCloud"), a wholly owned subsidiary of Beijing 21Vianet Broadband Data Center Co., Ltd. ("21Vianet"). 
 
 
 
